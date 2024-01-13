@@ -1,6 +1,9 @@
 #pragma once
 
 #include <string>
+#include <format>
+#include <vector>
+#include "Util.h"
 #include "ISerial.h"
 #include "AutoPointer.h"
 #include "AutoPointerBaseType.h"
@@ -8,73 +11,66 @@
 class SerialBase : ISerializer
 {
 public:
-	SerialBase(char* pBuffer, unsigned bufferLength);
+	SerialBase(std::string data);
 	virtual ~SerialBase() {};
-
-	virtual void SetBuffer(char* buffer, unsigned bufferLength);
 
 	virtual void IO(int            &io) = 0;
 	virtual void IO(double         &io) = 0;
-	virtual void IO(char           &io) = 0;
 	virtual void IO(bool           &io) = 0;
 	virtual void IO(std::string    &io) = 0;
 
 	//arrays
-	virtual void IOA(int*            io, int &len) = 0;
-	virtual void IOA(double*         io, int &len) = 0;
-	virtual void IOA(char*           io, int &len) = 0;
-	virtual void IOA(bool*           io, int &len) = 0;
-	virtual void IOA(std::string*    io, int &len) = 0;
+	virtual void IOA(std::vector<int> &io) = 0;
+	virtual void IOA(std::vector<double> &io) = 0;
+	virtual void IOA(std::vector<bool> &io) = 0;
+	virtual void IOA(std::vector<std::string> &io) = 0;
 
-	unsigned GetBufferPos();
-	void AdvanceBufferPos(unsigned number);
-
-	bool HasOverflowed();
-	void SignalOverflow();
-	
-	char ArraySeperator = NULL;
+	std::string ArraySeperator = DEFAULT_ARRAY_SEPERATOR;
 
 protected:
 
-	template <typename T>
-	void Serialize(T &io, char* pFormat)
+	void inline Serialize(int &io)
 	{
-		//max length printed = 10
-		char holder[SERIAL_BUFFER_LEN];
-		unsigned len = sprintf_s(holder, SERIAL_BUFFER_LEN, pFormat, io);
-		if ((len + m_BufferPos) > m_BufferLength)
-		{
-			m_OverFlowed = true;
-			return;
-		}
-		memcpy_s(&m_Buffer[m_BufferPos], (m_BufferLength - m_BufferPos), holder, len);
-		m_BufferPos += len;
+		auto result = std::format("%d", io);
+		m_Data.append(result);
+	};
+
+	void inline Serialize(double& io)
+	{
+		auto result = std::format("%.10Lf", io);
+		m_Data.append(result);
 	};
 
 	template <typename T>
-	void SerializeArray(T* io, int &len)
+	void SerializeArray(std::vector<T> &io)
 	{
-		for (int ii = 0; ii < len; ii++)
+		for(auto iter = io.begin(); iter != io.end(); iter++ )
 		{
-			if (!m_OverFlowed)
+			T holder = *iter;
+			IO(holder);
+			if (iter != io.end())
 			{
-				IO(io[ii]);
-				if (ii != (len - 1))
-				{
-					IO(ArraySeperator);
-				}
-			}
-			else
-			{
-				break;
+				IO(ArraySeperator);
 			}
 		}
 	};
 
-	char* m_Buffer = nullptr;
-	unsigned m_BufferLength = 0;
-	unsigned m_BufferPos = 0;
-	bool m_OverFlowed = false;
+	template <typename T, typename S>
+	void ReadArray(std::vector<T>& io)
+	{
+		int ii = 0;
+		auto tokens = Util::StringSplit(m_Data, ArraySeperator);
+		for(auto token : tokens)
+		{
+			S in(token);
+			T holder = io.at(ii);
+			in.IO(holder);
+			io.at(ii) = holder;
+			ii++;
+		}
+	};
+
+	std::string m_Data;
 
 	SerialBase() = delete;
 };

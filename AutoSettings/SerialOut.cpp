@@ -2,17 +2,14 @@
 
 void SerializerOut::IO(int &io)
 {
-	Serialize(io, "%d");
+	Serialize(io);
 }
 
 void SerializerOut::IO(double &io)
 {
-	Serialize(io, "%.10Lf");
+	Serialize(io);
 }
-void SerializerOut::IO(char &io)
-{
-	Serialize(io, "%c");
-}
+
 void SerializerOut::IO(bool &io)
 {
 	static std::string TrueString = "True";
@@ -24,34 +21,28 @@ void SerializerOut::IO(bool &io)
 }
 void SerializerOut::IO(std::string &io)
 {
-	unsigned len = io.size();
-	if ((len + m_BufferPos) > m_BufferLength)
-	{
-		m_OverFlowed = true;
-		return;
-	}
-	memcpy_s(&m_Buffer[m_BufferPos], (m_BufferLength - m_BufferPos), io.c_str(), len);
-	m_BufferPos += len;
+	m_Data.append(io);
 }
 
-void SerializerOut::IOA(int* io, int &len)
+void SerializerOut::IOA(std::vector<int>& io)
 {
-	SerializeArray(io, len);
+	SerializeArray(io);
 }
-void SerializerOut::IOA(double* io, int &len)
+
+void SerializerOut::IOA(std::vector<double>& io)
 {
-	SerializeArray(io, len);
+	SerializeArray(io);
 }
-void SerializerOut::IOA(char* io, int &len)
+
+void SerializerOut::IOA(std::vector<bool>& io)
 {
-	SerializeArray(io, len);
+	SerializeArray(io);
 }
-void SerializerOut::IOA(bool* io, int &len)
+
+void SerializerOut::IOA(std::vector<std::string>& io)
 {
-	SerializeArray(io, len);
+	SerializeArray(io);
 }
-void SerializerOut::IOA(std::string* io, int &len)
-{
-	SerializeArray(io, len);
-}
+
+
 

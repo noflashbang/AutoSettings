@@ -1,11 +1,64 @@
 #pragma once
 
 #include <string>
-
+#include <fstream>
+#include <sstream>
+#include <vector>
 
 static class Util
 {
 	public:
+
+		static inline std::string file_to_string(const std::string& file_name)
+		{
+			std::ifstream file_stream{ file_name };
+
+			if (!file_stream.fail())
+			{
+				return "";// Error opening file.
+			}
+
+			std::ostringstream str_stream;
+			file_stream >> str_stream.rdbuf();  // NOT str_stream << file_stream.rdbuf()
+
+			if (file_stream.fail() && !file_stream.eof())
+			{
+				return "";
+			}
+
+			return str_stream.str();
+		}
+
+		static inline bool string_to_file(const std::string& file_name, const std::string& content)
+		{
+			std::ofstream file_stream{ file_name };
+			if (!file_stream.fail())
+			{
+				return false;
+			}
+			file_stream << content;
+			return !file_stream.fail();
+		}
+
+		static inline std::vector<std::string> StringSplit(std::string s, std::string delimiter)
+		{
+			size_t pos_start = 0;
+			size_t pos_end = 0;
+			size_t delim_len = delimiter.length();
+			std::string token;
+			std::vector<std::string> res;
+
+			while ((pos_end = s.find(delimiter, pos_start)) != std::string::npos)
+			{
+				token = s.substr(pos_start, pos_end - pos_start);
+				pos_start = pos_end + delim_len;
+				res.push_back(token);
+			}
+
+			res.push_back(s.substr(pos_start));
+			return res;
+		}
+
 		static inline void StringToUpper(std::string* strToConvert)
 		{
 			for (std::string::iterator p = strToConvert->begin(); strToConvert->end() != p; ++p)

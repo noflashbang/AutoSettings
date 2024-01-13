@@ -245,197 +245,73 @@ void AutoSettingGroup::GetAllEntries(std::vector<AutoSettingEntry*>* pEntries)
 
 bool AutoSettingSerializerOut::IO(AutoSettingEntry &io)
 {
-	unsigned lenK = io.GetKey().size();
-	unsigned lenV = io.GetValue().size();
-	if ((lenK + 2 + lenV + m_BufferPos) > m_BufferLength)
-	{
-		m_OverFlowed = true;
-		return false;
-	}
-	memcpy(&m_Buffer[m_BufferPos], io.GetKey().c_str(), lenK);
-	m_BufferPos += lenK;
-	memcpy(&m_Buffer[m_BufferPos], "=", 1);
-	m_BufferPos += 1;
-	memcpy(&m_Buffer[m_BufferPos], io.GetValue().c_str(), lenV);
-	m_BufferPos += lenV;
-	memcpy(&m_Buffer[m_BufferPos], "\n", 1);
-	m_BufferPos += 1;
+	m_Data.append(io.GetKey());
+	m_Data.append("=");
+	m_Data.append(io.GetValue());
+	m_Data.append("\n");
+
 	return true;
 }
 bool AutoSettingSerializerOut::IO(AutoSettingGroup &io)
 {
-	unsigned lenGN = io.GetName().size();
-	if ((lenGN + 3 + m_BufferPos) > m_BufferLength)
-	{
-		m_OverFlowed = true;
-		return false;
-	}
-	memcpy(&m_Buffer[m_BufferPos], "[", 1);
-	m_BufferPos += 1;
-	memcpy(&m_Buffer[m_BufferPos], io.GetName().c_str(), lenGN);
-	m_BufferPos += lenGN;
-	memcpy(&m_Buffer[m_BufferPos], "]\n", 2);
-	m_BufferPos += 2;
+	m_Data.append("[");
+	m_Data.append(io.GetName());
+	m_Data.append("]\n");
 
 	std::vector<AutoSettingEntry*> Entries;
 	io.GetAllEntries(&Entries);
 
-	std::vector<AutoSettingEntry*>::iterator iter;
-	for (iter = Entries.begin(); iter != Entries.end(); iter++)
+	for(AutoSettingEntry* pEntry : Entries)
 	{
-		(*iter)->Update();
-		if ((*iter)->GetSave())
+		pEntry->Update();
+		if (pEntry->GetSave())
 		{
-			AutoSettingEntry hold = (**iter);
+			AutoSettingEntry hold = (*pEntry);
 			this->IO(hold);
 		}
 	}
+
 	return true;
 }
 //==============================================================================
 bool AutoSettingSerializerIn::IO(AutoSettingEntry &io)
 {
-	bool NotDone = true;
-	unsigned Start = m_BufferPos;
-	bool NotFoundEnd = true;
-	unsigned End = 0;
-	unsigned lenL = 0;
-	unsigned Before = m_BufferPos;
-	while (m_BufferPos <= m_BufferLength && NotDone)
+	auto entry = Util::StringSplit(m_Data, "=");
+	if (entry.size() != 2)
 	{
-		if (m_Buffer[m_BufferPos] == '\n' && NotFoundEnd)
-		{
-			NotFoundEnd = false;
-			End = m_BufferPos;
-		}
-		lenL = (End - Start);
-		NotDone = (NotFoundEnd);
-		if (!NotDone)
-		{
-			bool comment = false;
-			if (m_Buffer[Start] == '#')
-				comment = true;
-
-			//check the length and comment
-			if (lenL <= 0 || comment)
-			{
-				//bad line or comment, move onto the next one
-				Start = ++End;
-				End = 0;
-				NotFoundEnd = true;
-				NotDone = true;
-			}
-		}
-		m_BufferPos++;
-	}
-	if (NotDone)
-	{
-		//hit the end of the file without finding a new line
-		//might just be the last line
-		//check for length
-		lenL = (m_BufferPos - 1) - Start;
-		if (lenL <= 1)
-			return false;
-	}
-
-	char* buffer = new char[lenL + 1];
-	memset(buffer, 0, lenL + 1);
-	memcpy(buffer, &m_Buffer[Start], lenL);
-
-	//now find the '='
-	unsigned current = 0;
-	bool notFound = true;
-	while (notFound && (current <= lenL))
-	{
-		if (buffer[current] == '=')
-			notFound = false;
-		else
-			current++;
-	}
-
-	if (notFound)
-	{
-		//probaly hit another group
-		m_BufferPos = Before;
-		delete[] buffer;
 		return false;
 	}
 
-	buffer[current] = '\0';
-	io.SetKey(buffer);
-	int dataLen = (lenL - (current + 1));
-	if (dataLen > 0)
-	{
-		io.SetValue(&buffer[current + 1]);
-	}
-	else
-	{
-		io.SetValue("");
-	}
-
-	delete[] buffer;
-
+	io.SetKey(entry[0]);
+	io.SetValue(entry[1]);
 	io.SetLoaded(true);
 	return true;
 }
 bool AutoSettingSerializerIn::IO(AutoSettingGroup &io)
 {
-	bool NotDone = true;
-	bool NotFoundStart = true;
-	unsigned Start = 0;
-	bool NotFoundEnd = true;
-	unsigned End = 0;
-	unsigned lenGN = 0;
-	while (m_BufferPos <= m_BufferLength && NotDone)
+	//for each line
+	auto lines = Util::StringSplit(m_Data, "\n");
+	for (auto line : lines)
 	{
-		if (m_Buffer[m_BufferPos] == '[' && NotFoundStart)
+		//if line is a group
+		if (line[0] == '[')
 		{
-			NotFoundStart = false;
-			Start = m_BufferPos;
+			io.SetName(Util::StringTrimEx(Util::StringTrimEx(line, '['), ']'));
 		}
-		if (m_Buffer[m_BufferPos] == ']' && NotFoundEnd)
+
+		//if line is an entry
+		if (line.find("=") != std::string::npos)
 		{
-			NotFoundEnd = false;
-			End = m_BufferPos;
-		}
-		lenGN = (End - (Start + 1));
-		NotDone = (NotFoundStart || NotFoundEnd);
-		if (!NotDone)
-		{
-			//check the length
-			if (lenGN <= 0)
+			AutoSettingSerializerIn in(line);
+			AutoSettingEntry entry;
+			bool okay = in.IO(entry);
+			if (okay)
 			{
-				//bad group name move onto the next one
-				NotFoundStart = true;
-				NotFoundEnd = true;
-				NotDone = true;
+				io.AddEntry(&entry);
 			}
 		}
-		m_BufferPos++;
 	}
-	if (NotDone)
-	{
-		//hit the end of the file without finding a group name that was good
-		return false;
-	}
-	char* temp = new char[lenGN + 1];
-	memset(temp, 0, lenGN + 1);
-	memcpy(temp, &m_Buffer[(Start + 1)], lenGN);
-	m_BufferPos += 1; //move away from new line
 
-	io.SetName(temp);
-	delete[] temp;
-
-	bool noError = true;
-	while ((m_BufferPos <= m_BufferLength) && noError)
-	{
-		AutoSettingEntry hold;
-		noError = this->IO(hold);
-		if (noError)
-		{
-			io.AddEntry(&hold);
-		}
-	}
 	return true;
 }
 //=====================================================================
@@ -578,40 +454,54 @@ bool AutoSetting::FindSettingInternal(std::string Group, std::string Key, IDator
 void AutoSetting::LoadSettingsInternal(std::string path)
 {
 	m_FilePath = path;
+	std::string contents = Util::file_to_string(m_FilePath);
+	std::vector<std::string> groups;
 
-	std::fstream file;
-	file.open(m_FilePath.c_str(), std::fstream::in);
-	if (!file.fail())
+	bool findEnd = false;
+	bool proccess = false;
+	int pos = 0;
+	int pos2 = 0;
+
+	//look for each group
+	for (int ii = 0; ii < contents.length(); ii++)
 	{
-		//load the contents onto a buffer
-		file.seekg(0, std::ios::end);
-		unsigned int length = file.tellg();
-		file.seekg(0, std::ios::beg);
-
-		if (length <= 10485760) //limit allowable file size(10 megabytes)
+		char c = contents[ii];
+		if (c == '[')
 		{
-			char* buffer = new char[length];
-			memset(buffer, 0, length);
-
-			file.read(buffer, length);
-			file.close();
-
-			//now construct
-			AutoSettingSerializerIn builder(buffer, length);
-			bool noError = true;
-			unsigned CurrentRead = 0;
-			while (noError && (CurrentRead <= length))
+			if (findEnd)
 			{
-				AutoSettingGroup hold;
-				noError = builder.IO(hold);
-				if (noError)
-				{
-					m_Groups.push_back(hold);
-				}
-				CurrentRead = builder.GetBufferPos();
+				pos2 = ii - 1;
+				findEnd = false;
+				proccess = true;
 			}
-			delete [] buffer;
+			else
+			{
+				pos = ii;
+				findEnd = true;
+			}
 		}
+		if (proccess)
+		{
+			proccess = false;
+			std::string groupStr = contents.substr(pos + 1, pos2 - pos);
+			groups.push_back(groupStr);
+		}
+	}
+
+	//add the last
+	if (findEnd)
+	{
+		pos2 = contents.length() - 1;
+		std::string groupStr = contents.substr(pos + 1, pos2 - pos);
+		groups.push_back(groupStr);
+	}
+	
+	for (auto groupStr : groups)
+	{
+		AutoSettingSerializerIn in(groupStr);
+		AutoSettingGroup group;
+		in.IO(group);
+		m_Groups.push_back((group));
 	}
 }
 void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
@@ -666,30 +556,19 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 		}
 	}
 
-	std::fstream file;
+	
 	m_FilePath = path;
-	file.open(m_FilePath.c_str(), std::fstream::out | std::fstream::trunc);
-	if (!file.fail())
+	
+	std::string dataOut;
+	for (auto &iter : m_Groups)
 	{
-		//save them
-		int len = 1048576; //allow a max of 1 megabyte for each section
-		char* buffer = new char[len];
-		std::vector< AutoSettingGroup >::iterator iter;
-		for (iter = m_Groups.begin(); iter != m_Groups.end(); iter++)
+		if (iter.GetSave())
 		{
-			if (iter->GetSave())
-			{
-				memset(buffer, 0, len);
-				AutoSettingSerializerOut builder(buffer, len);
-				AutoSettingGroup hold;
-				hold = (*iter);
-				builder.IO(hold);
-				file.write(buffer, builder.GetBufferPos());
-			}
+			AutoSettingSerializerOut builder(dataOut);
+			builder.IO(iter);
 		}
-		delete[] buffer;
-		file.close();
 	}
+	Util::string_to_file(m_FilePath, dataOut);
 }
 void AutoSetting::AddKeyGroup(std::string Group, std::string Key, IDator* pDator, bool DatorPersists)
 {

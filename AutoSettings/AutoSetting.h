@@ -116,7 +116,7 @@ private:
 class AutoSettingSerializerOut : public SerializerOut
 {
 public:
-	AutoSettingSerializerOut(char* pBuffer, unsigned bufferLength) :SerializerOut(pBuffer, bufferLength) {};
+	AutoSettingSerializerOut(std::string data) :SerializerOut(data) {};
 	virtual ~AutoSettingSerializerOut() {};
 
 	virtual bool IO(AutoSettingEntry &io);
@@ -129,7 +129,7 @@ protected:
 class AutoSettingSerializerIn : public SerializerIn
 {
 public:
-	AutoSettingSerializerIn(char* pBuffer, unsigned bufferLength) :SerializerIn(pBuffer, bufferLength) {};
+	AutoSettingSerializerIn(std::string data) :SerializerIn(data) {};
 	virtual ~AutoSettingSerializerIn() {};
 
 	virtual bool IO(AutoSettingEntry &io);
@@ -213,19 +213,19 @@ public:
 		SetSettingDirect(stdGroup, stdKey, Data);
 	};
 	template<typename T>
-	void SetSettingDirectArray(std::string Group, std::string Key, T* Data, int len)
+	void SetSettingDirectArray(std::string Group, std::string Key, std::vector<T>& Data)
 	{
-		DatorArray<T> typeDator(Data, len);
+		DatorArray<T> typeDator(Data);
 		Util::StringToUpper(&Group);
 		Util::StringToUpper(&Key);
 		SetSettingInternal(Group, Key, &typeDator, false);
 	};
 	template<typename T>
-	void SetSettingDirectArray(char* pGroup, char* pKey, T* Data, int len)
+	void SetSettingDirectArray(char* pGroup, char* pKey, std::vector<T>& Data)
 	{
 		std::string stdGroup = pGroup;
 		std::string stdKey = pKey;
-		SetSettingDirectArray(stdGroup, stdKey, Data, len);
+		SetSettingDirectArray(stdGroup, stdKey, Data);
 	};
 	template<typename T>
 	void GetSettingDirect(std::string Group, std::string Key, T& Data)
@@ -243,19 +243,19 @@ public:
 		GetSettingDirect(stdGroup, stdKey, Data);
 	};
 	template<typename T>
-	void GetSettingDirectArray(std::string Group, std::string Key, T* Data, int len)
+	void GetSettingDirectArray(std::string Group, std::string Key, std::vector<T>& Data)
 	{
-		DatorArray<T> typeDator(Data, len);
+		DatorArray<T> typeDator(Data);
 		Util::StringToUpper(&Group);
 		Util::StringToUpper(&Key);
 		GetSettingInternal(Group, Key, &typeDator, false);
 	};
 	template<typename T>
-	void GetSettingDirectArray(char* pGroup, char* pKey, T* Data, int len)
+	void GetSettingDirectArray(char* pGroup, char* pKey, std::vector<T>& Data)
 	{
 		std::string stdGroup = pGroup;
 		std::string stdKey = pKey;
-		GetSettingDirectArray(stdGroup, stdKey, Data, len);
+		GetSettingDirectArray(stdGroup, stdKey, Data);
 	};
 	template<typename T>
 	bool FindSettingDirect(std::string Group, std::string Key, T& Data)

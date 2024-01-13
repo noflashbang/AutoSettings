@@ -15,20 +15,14 @@ public:
 
 	std::string GetValue()
 	{
-		static char buffer[DATOR_BUFFER_LEN];
-		memset(buffer, 0, DATOR_BUFFER_LEN);
-
-		O out(buffer, DATOR_BUFFER_LEN);
+		std::string buffer;
+		O out(buffer);
 		out.IO(m_Value);
-		std::string ret = buffer;
-		return ret;
+		return buffer;
 	};
 	void SetValue(std::string iVal)
 	{
-		static char buffer[DATOR_BUFFER_LEN];
-		memset(buffer, 0, DATOR_BUFFER_LEN);
-		memcpy(buffer, iVal.c_str(), iVal.length());
-		I in(buffer, DATOR_BUFFER_LEN);
+		I in(iVal);
 		in.IO(m_Value);
 	};
 
