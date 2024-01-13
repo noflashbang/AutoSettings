@@ -1,0 +1,7 @@
+#pragma once
+
+#define DATOR_BUFFER_LEN 256
+#define DATOR_ARRAY_BUFFER_LEN (DATOR_BUFFER_LEN*4)
+
+
+
