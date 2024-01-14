@@ -2,12 +2,12 @@
 
 void SerializerIn::IO(int &io)
 {
-	io = stoi(m_Data);
+	io = stoi(*m_Data);
 }
 
 void SerializerIn::IO(double &io)
 {
-	io = stod(m_Data);
+	io = stod(*m_Data);
 }
 
 void SerializerIn::IO(bool &io)
@@ -30,7 +30,7 @@ void SerializerIn::IO(bool &io)
 }
 void SerializerIn::IO(std::string &io)
 {
-	io = m_Data;
+	io = *m_Data;
 }
 
 void SerializerIn::IOA(std::vector<int>& io)

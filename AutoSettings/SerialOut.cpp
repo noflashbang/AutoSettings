@@ -21,7 +21,7 @@ void SerializerOut::IO(bool &io)
 }
 void SerializerOut::IO(std::string &io)
 {
-	m_Data.append(io);
+	m_Data->append(io);
 }
 
 void SerializerOut::IOA(std::vector<int>& io)

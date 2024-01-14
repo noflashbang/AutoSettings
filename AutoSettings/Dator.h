@@ -16,13 +16,13 @@ public:
 	std::string GetValue()
 	{
 		std::string buffer;
-		O out(buffer);
+		O out(&buffer);
 		out.IO(m_Value);
 		return buffer;
 	};
 	void SetValue(std::string iVal)
 	{
-		I in(iVal);
+		I in(&iVal);
 		in.IO(m_Value);
 	};
 

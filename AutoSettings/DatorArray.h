@@ -19,13 +19,13 @@ public:
 	std::string GetValue()
 	{
 		std::string buffer;
-		O out(buffer);
+		O out(&buffer);
 		out.IOA(m_Value);
 		return buffer;
 	};
 	void SetValue(std::string iVal)
 	{
-		I in(iVal);
+		I in(&iVal);
 		in.IOA(m_Value);
 	};
 

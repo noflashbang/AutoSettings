@@ -245,18 +245,18 @@ void AutoSettingGroup::GetAllEntries(std::vector<AutoSettingEntry*>* pEntries)
 
 bool AutoSettingSerializerOut::IO(AutoSettingEntry &io)
 {
-	m_Data.append(io.GetKey());
-	m_Data.append("=");
-	m_Data.append(io.GetValue());
-	m_Data.append("\n");
+	m_Data->append(io.GetKey());
+	m_Data->append("=");
+	m_Data->append(io.GetValue());
+	m_Data->append("\n");
 
 	return true;
 }
 bool AutoSettingSerializerOut::IO(AutoSettingGroup &io)
 {
-	m_Data.append("[");
-	m_Data.append(io.GetName());
-	m_Data.append("]\n");
+	m_Data->append("[");
+	m_Data->append(io.GetName());
+	m_Data->append("]\n");
 
 	std::vector<AutoSettingEntry*> Entries;
 	io.GetAllEntries(&Entries);
@@ -276,7 +276,7 @@ bool AutoSettingSerializerOut::IO(AutoSettingGroup &io)
 //==============================================================================
 bool AutoSettingSerializerIn::IO(AutoSettingEntry &io)
 {
-	auto entry = Util::StringSplit(m_Data, "=");
+	auto entry = Util::StringSplit(*m_Data, "=");
 	if (entry.size() != 2)
 	{
 		return false;
@@ -290,7 +290,7 @@ bool AutoSettingSerializerIn::IO(AutoSettingEntry &io)
 bool AutoSettingSerializerIn::IO(AutoSettingGroup &io)
 {
 	//for each line
-	auto lines = Util::StringSplit(m_Data, "\n");
+	auto lines = Util::StringSplit(*m_Data, "\n");
 	for (auto line : lines)
 	{
 		//if line is a group
@@ -302,7 +302,7 @@ bool AutoSettingSerializerIn::IO(AutoSettingGroup &io)
 		//if line is an entry
 		if (line.find("=") != std::string::npos)
 		{
-			AutoSettingSerializerIn in(line);
+			AutoSettingSerializerIn in(&line);
 			AutoSettingEntry entry;
 			bool okay = in.IO(entry);
 			if (okay)
@@ -498,7 +498,7 @@ void AutoSetting::LoadSettingsInternal(std::string path)
 	
 	for (auto groupStr : groups)
 	{
-		AutoSettingSerializerIn in(groupStr);
+		AutoSettingSerializerIn in(&groupStr);
 		AutoSettingGroup group;
 		in.IO(group);
 		m_Groups.push_back((group));
@@ -564,7 +564,7 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 	{
 		if (iter.GetSave())
 		{
-			AutoSettingSerializerOut builder(dataOut);
+			AutoSettingSerializerOut builder(&dataOut);
 			builder.IO(iter);
 		}
 	}

@@ -11,7 +11,7 @@
 class SerializerOut : public SerialBase
 {
 public:
-	SerializerOut(std::string data) : SerialBase(data) {}
+	SerializerOut(std::string* data) : SerialBase(data) {}
 	virtual ~SerializerOut() {};
 
 	virtual void IO(int            &io);

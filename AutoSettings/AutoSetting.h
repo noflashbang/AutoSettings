@@ -116,7 +116,7 @@ private:
 class AutoSettingSerializerOut : public SerializerOut
 {
 public:
-	AutoSettingSerializerOut(std::string data) :SerializerOut(data) {};
+	AutoSettingSerializerOut(std::string* data) :SerializerOut(data) {};
 	virtual ~AutoSettingSerializerOut() {};
 
 	virtual bool IO(AutoSettingEntry &io);
@@ -129,7 +129,7 @@ protected:
 class AutoSettingSerializerIn : public SerializerIn
 {
 public:
-	AutoSettingSerializerIn(std::string data) :SerializerIn(data) {};
+	AutoSettingSerializerIn(std::string* data) :SerializerIn(data) {};
 	virtual ~AutoSettingSerializerIn() {};
 
 	virtual bool IO(AutoSettingEntry &io);

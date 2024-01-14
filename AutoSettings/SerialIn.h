@@ -9,7 +9,7 @@
 class SerializerIn : public SerialBase
 {
 public:
-	SerializerIn(std::string data) :  SerialBase(data) {}
+	SerializerIn(std::string* data) :  SerialBase(data) {}
 	virtual ~SerializerIn() {};
 
 	virtual void IO(int            &io);

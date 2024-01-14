@@ -11,7 +11,7 @@
 class SerialBase : ISerializer
 {
 public:
-	SerialBase(std::string data);
+	SerialBase(std::string* data);
 	virtual ~SerialBase() {};
 
 	virtual void IO(int            &io) = 0;
@@ -31,14 +31,14 @@ protected:
 
 	void inline Serialize(int &io)
 	{
-		auto result = std::format("%d", io);
-		m_Data.append(result);
+		auto result = std::format("{}", io);
+		m_Data->append(result);
 	};
 
 	void inline Serialize(double& io)
 	{
-		auto result = std::format("%.10Lf", io);
-		m_Data.append(result);
+		auto result = std::format("{}", io);
+		m_Data->append(result);
 	};
 
 	template <typename T>
@@ -59,10 +59,10 @@ protected:
 	void ReadArray(std::vector<T>& io)
 	{
 		int ii = 0;
-		auto tokens = Util::StringSplit(m_Data, ArraySeperator);
+		auto tokens = Util::StringSplit(*m_Data, ArraySeperator);
 		for(auto token : tokens)
 		{
-			S in(token);
+			S in(&token);
 			T holder = io.at(ii);
 			in.IO(holder);
 			io.at(ii) = holder;
@@ -70,7 +70,7 @@ protected:
 		}
 	};
 
-	std::string m_Data;
+	std::string* m_Data;
 
 	SerialBase() = delete;
 };
