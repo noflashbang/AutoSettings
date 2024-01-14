@@ -114,7 +114,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ArrayDator.h" />
     <ClInclude Include="AutoSetting.h" />
     <ClInclude Include="Dator.h" />
     <ClInclude Include="DatorArray.h" />

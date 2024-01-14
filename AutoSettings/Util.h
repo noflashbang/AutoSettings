@@ -32,7 +32,7 @@ static class Util
 		static inline bool string_to_file(const std::string& file_name, const std::string& content)
 		{
 			std::ofstream file_stream{ file_name };
-			if (!file_stream.fail())
+			if (file_stream.fail())
 			{
 				return false;
 			}

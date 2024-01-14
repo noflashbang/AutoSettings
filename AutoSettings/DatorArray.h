@@ -9,7 +9,7 @@ template <class T, class I = SerializerIn, class O = SerializerOut>
 class DatorArray : public IDator
 {
 public:
-	DatorArray<T, I, O>(std::vector<T> value) : m_Value(value)
+	DatorArray<T, I, O>(std::vector<T>& value) : m_Value(value)
 	{
 	};
 	~DatorArray<T, I, O>()
@@ -31,5 +31,5 @@ public:
 
 protected:
 private:
-	std::vector<T> m_Value;
+	std::vector<T>& m_Value;
 };

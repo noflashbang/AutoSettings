@@ -30,9 +30,6 @@
     <ClInclude Include="DatorArray.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ArrayDator.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="ISerial.h">
       <Filter>Header Files</Filter>
     </ClInclude>

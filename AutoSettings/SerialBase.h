@@ -46,12 +46,12 @@ protected:
 	{
 		for(auto iter = io.begin(); iter != io.end(); iter++ )
 		{
-			T holder = *iter;
-			IO(holder);
-			if (iter != io.end())
+			if (iter != io.begin())
 			{
 				IO(ArraySeperator);
 			}
+			T holder = *iter;
+			IO(holder);
 		}
 	};
 
