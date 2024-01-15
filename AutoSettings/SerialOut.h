@@ -1,12 +1,7 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
+#include "StandardLib.h"
 #include "SerialBase.h"
-#include "AutoPointer.h"
-#include "AutoPointerBaseType.h"
-
 
 class SerializerOut : public SerialBase
 {
@@ -20,12 +15,14 @@ public:
 	virtual void IO(std::string    &io);
 
 	//arrays
-	virtual void IOA(std::vector<int> &io);
-	virtual void IOA(std::vector<double> &io);
-	virtual void IOA(std::vector<bool> &io);
-	virtual void IOA(std::vector<std::string> &io);
+	virtual void IO(std::vector<int> &io);
+	virtual void IO(std::vector<double> &io);
+	virtual void IO(std::vector<bool> &io);
+	virtual void IO(std::vector<std::string> &io);
 
 protected:
 
 	SerializerOut() = delete;
+	SerializerOut(const SerializerOut&) = delete;
+	SerializerOut& operator=(const SerializerOut&) = delete;
 };

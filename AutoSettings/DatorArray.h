@@ -20,16 +20,19 @@ public:
 	{
 		std::string buffer;
 		O out(&buffer);
-		out.IOA(m_Value);
+		out.IO(m_Value);
 		return buffer;
 	};
 	void SetValue(std::string iVal)
 	{
 		I in(&iVal);
-		in.IOA(m_Value);
+		in.IO(m_Value);
 	};
 
 protected:
+	DatorArray<T, I, O>() = delete;
+	DatorArray<T, I, O>(const DatorArray<T, I, O>&) = delete;
+	DatorArray<T, I, O>& operator=(const DatorArray<T, I, O>&) = delete;
 private:
 	std::vector<T>& m_Value;
 };

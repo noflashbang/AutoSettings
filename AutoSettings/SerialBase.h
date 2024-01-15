@@ -1,12 +1,9 @@
 #pragma once
 
-#include <string>
-#include <format>
-#include <vector>
+#include "StandardLib.h"
 #include "Util.h"
 #include "ISerial.h"
-#include "AutoPointer.h"
-#include "AutoPointerBaseType.h"
+
 
 class SerialBase : ISerializer
 {
@@ -18,12 +15,10 @@ public:
 	virtual void IO(double         &io) = 0;
 	virtual void IO(bool           &io) = 0;
 	virtual void IO(std::string    &io) = 0;
-
-	//arrays
-	virtual void IOA(std::vector<int> &io) = 0;
-	virtual void IOA(std::vector<double> &io) = 0;
-	virtual void IOA(std::vector<bool> &io) = 0;
-	virtual void IOA(std::vector<std::string> &io) = 0;
+	virtual void IO(std::vector<int> &io) = 0;
+	virtual void IO(std::vector<double> &io) = 0;
+	virtual void IO(std::vector<bool> &io) = 0;
+	virtual void IO(std::vector<std::string> &io) = 0;
 
 	std::string ArraySeperator = DEFAULT_ARRAY_SEPERATOR;
 
@@ -73,5 +68,7 @@ protected:
 	std::string* m_Data;
 
 	SerialBase() = delete;
+	SerialBase(const SerialBase&) = delete;
+	SerialBase& operator=(const SerialBase&) = delete;
 };
 

@@ -24,22 +24,22 @@ void SerializerOut::IO(std::string &io)
 	m_Data->append(io);
 }
 
-void SerializerOut::IOA(std::vector<int>& io)
+void SerializerOut::IO(std::vector<int>& io)
 {
 	SerializeArray(io);
 }
 
-void SerializerOut::IOA(std::vector<double>& io)
+void SerializerOut::IO(std::vector<double>& io)
 {
 	SerializeArray(io);
 }
 
-void SerializerOut::IOA(std::vector<bool>& io)
+void SerializerOut::IO(std::vector<bool>& io)
 {
 	SerializeArray(io);
 }
 
-void SerializerOut::IOA(std::vector<std::string>& io)
+void SerializerOut::IO(std::vector<std::string>& io)
 {
 	SerializeArray(io);
 }

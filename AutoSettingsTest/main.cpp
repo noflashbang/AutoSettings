@@ -23,16 +23,16 @@ int main()
 	std::vector <std::string> val5array = { "test", "string", "is", "cool", "wooh" };
 
 	as.SetSettingDirect("NEW", "val", val);
-	as.SetSettingDirectArray("NEW", "valarray", valarray);
+	as.SetSettingDirect("NEW", "valarray", valarray);
 	
 	as.SetSettingDirect("NEW", "val3", val3);
-	as.SetSettingDirectArray("NEW", "val3array", val3array);
+	as.SetSettingDirect("NEW", "val3array", val3array);
 	
 	as.SetSettingDirect("NEW", "val4", val4);
-	as.SetSettingDirectArray("NEW", "val4array", val4array);
+	as.SetSettingDirect("NEW", "val4array", val4array);
 	
 	as.SetSettingDirect("NEW", "val5", val5);
-	as.SetSettingDirectArray("NEW", "val5array", val5array);
+	as.SetSettingDirect("NEW", "val5array", val5array);
 
 
 	bool gval = false;
@@ -51,22 +51,22 @@ int main()
 	as.GetSettingDirect("NEW", "val3", gval3);
 	as.GetSettingDirect("NEW", "val4", gval4);
 	as.GetSettingDirect("NEW", "val5", gval5);
-	as.GetSettingDirectArray("NEW", "valarray", gvalarray);
-	as.GetSettingDirectArray("NEW", "val3array", gval3array);
-	as.GetSettingDirectArray("NEW", "val4array", gval4array);
-	as.GetSettingDirectArray("NEW", "val5array", gval5array);
+	as.GetSettingDirect("NEW", "valarray", gvalarray);
+	as.GetSettingDirect("NEW", "val3array", gval3array);
+	as.GetSettingDirect("NEW", "val4array", gval4array);
+	as.GetSettingDirect("NEW", "val5array", gval5array);
 
 	as.SetSettingDirect("NEW", "val", gval);
-	as.SetSettingDirectArray("NEW", "valarray", gvalarray);
+	as.SetSettingDirect("NEW", "valarray", gvalarray);
 
 	as.SetSettingDirect("NEW", "val3", gval3);
-	as.SetSettingDirectArray("NEW", "val3array", gval3array);
+	as.SetSettingDirect("NEW", "val3array", gval3array);
 
 	as.SetSettingDirect("NEW", "val4", gval4);
-	as.SetSettingDirectArray("NEW", "val4array", gval4array);
+	as.SetSettingDirect("NEW", "val4array", gval4array);
 
 	as.SetSettingDirect("NEW", "val5", gval5);
-	as.SetSettingDirectArray("NEW", "val5array", gval5array);
+	as.SetSettingDirect("NEW", "val5array", gval5array);
 
 	bool test = false;
 	Dator<bool> datortest(test);

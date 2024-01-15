@@ -33,22 +33,22 @@ void SerializerIn::IO(std::string &io)
 	io = *m_Data;
 }
 
-void SerializerIn::IOA(std::vector<int>& io)
+void SerializerIn::IO(std::vector<int>& io)
 {
 	ReadArray<int, SerializerIn>(io);
 }
 
-void SerializerIn::IOA(std::vector<double>& io)
+void SerializerIn::IO(std::vector<double>& io)
 {
 	ReadArray<double, SerializerIn>(io);
 }
 
-void SerializerIn::IOA(std::vector<bool> &io)
+void SerializerIn::IO(std::vector<bool> &io)
 {
 	ReadArray<bool, SerializerIn>(io);
 }
 
-void SerializerIn::IOA(std::vector<std::string> &io)
+void SerializerIn::IO(std::vector<std::string> &io)
 {
 	ReadArray<std::string, SerializerIn>(io);
 }

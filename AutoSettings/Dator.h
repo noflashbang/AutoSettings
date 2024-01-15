@@ -1,6 +1,6 @@
 #pragma once
 
-#include <String>
+#include "StandardLib.h"
 #include "IDator.h"
 #include "SerialOut.h"
 #include "SerialIn.h"
@@ -27,7 +27,9 @@ public:
 	};
 
 protected:
-	Dator<T, I, O>() {};
+	Dator<T, I, O>() = delete;
+	Dator<T, I, O>(const Dator<T, I, O>&) = delete;
+	Dator<T, I, O>& operator=(const Dator<T, I, O>&) = delete;
 private:
 	T& m_Value;
 };

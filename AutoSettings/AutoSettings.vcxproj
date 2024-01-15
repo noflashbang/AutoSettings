@@ -75,6 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);AUTOSET_EXPORTS</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -83,6 +84,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);AUTOSET_EXPORTS</PreprocessorDefinitions>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -93,6 +95,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);AUTOSET_EXPORTS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -107,6 +110,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <PreprocessorDefinitions>_MBCS;%(PreprocessorDefinitions);AUTOSET_EXPORTS</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -115,18 +119,30 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AutoSetting.h" />
+    <ClInclude Include="AutoSettingAdapter.h" />
+    <ClInclude Include="AutoSettingEntry.h" />
+    <ClInclude Include="AutoSettingGroup.h" />
+    <ClInclude Include="AutoSettingSerializerIn.h" />
+    <ClInclude Include="AutoSettingSerializerOut.h" />
     <ClInclude Include="Dator.h" />
-    <ClInclude Include="DatorArray.h" />
-    <ClInclude Include="DatorConstants.h" />
     <ClInclude Include="IDator.h" />
     <ClInclude Include="ISerial.h" />
     <ClInclude Include="SerialIn.h" />
     <ClInclude Include="SerialOut.h" />
     <ClInclude Include="SerialBase.h" />
+    <ClInclude Include="StandardLib.h" />
     <ClInclude Include="Util.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AutoSetting.cpp" />
+    <ClCompile Include="AutoSettingAdapter.cpp" />
+    <ClCompile Include="AutoSettingApi.cpp" />
+    <ClCompile Include="AutoSettingApi.h" />
+    <ClCompile Include="AutoSettingCore.h" />
+    <ClCompile Include="AutoSettingEntry.cpp" />
+    <ClCompile Include="AutoSettingGroup.cpp" />
+    <ClCompile Include="AutoSettingSerializerIn.cpp" />
+    <ClCompile Include="AutoSettingSerializerOut.cpp" />
     <ClCompile Include="SerialIn.cpp" />
     <ClCompile Include="SerialOut.cpp" />
     <ClCompile Include="SerialBase.cpp" />

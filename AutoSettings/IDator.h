@@ -1,7 +1,6 @@
 #pragma once
 
-#include <String>
-#include "DatorConstants.h"
+#include "StandardLib.h"
 
 class IDator
 {
