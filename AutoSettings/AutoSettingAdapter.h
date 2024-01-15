@@ -18,8 +18,8 @@ public:
 	static AutoSettingHandle AutoSet_Create(const std::string& path);	
 	static void AutoSet_Save(AutoSettingHandle handle, const std::string& path, AutoSettingMode mode);
 	static void AutoSet_Destroy(AutoSettingHandle handle);
-	static void AutoSetting_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
-	static void AutoSetting_DeleteGroup(AutoSettingHandle handle, const std::string& group);
+	static void AutoSet_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
+	static void AutoSet_DeleteGroup(AutoSettingHandle handle, const std::string& group);
 	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value,                      bool attachDator = false);
 	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value,                   bool attachDator = false);
 	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, bool& value,                     bool attachDator = false);

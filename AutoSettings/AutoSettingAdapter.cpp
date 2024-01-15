@@ -26,7 +26,7 @@ void AutoSettingAdapter::AutoSet_Destroy(AutoSettingHandle handle)
 	pAdapter->RemoveAutoSettingBundle(handle);
 }
 
-void AutoSettingAdapter::AutoSetting_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key)
+void AutoSettingAdapter::AutoSet_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key)
 {
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	AutoSettingBundle bundle = pAdapter->GetAutoSettingBundle(handle);
@@ -35,7 +35,7 @@ void AutoSettingAdapter::AutoSetting_DeleteSetting(AutoSettingHandle handle, con
 		bundle.pAutoSetting->DeleteSetting(group, key);
 	}
 }
-void AutoSettingAdapter::AutoSetting_DeleteGroup(AutoSettingHandle handle, const std::string& group)
+void AutoSettingAdapter::AutoSet_DeleteGroup(AutoSettingHandle handle, const std::string& group)
 {
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	AutoSettingBundle bundle = pAdapter->GetAutoSettingBundle(handle);
