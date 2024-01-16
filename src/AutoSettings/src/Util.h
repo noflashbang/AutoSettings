@@ -56,42 +56,6 @@ static class Util
 			return res;
 		}
 
-		static inline void StringToUpper(std::string* strToConvert)
-		{
-			for (std::string::iterator p = strToConvert->begin(); strToConvert->end() != p; ++p)
-				*p = toupper(*p);
-		};
-
-		static inline void StringToLower(std::string* strToConvert)
-		{
-			for (std::string::iterator p = strToConvert->begin(); strToConvert->end() != p; ++p)
-				*p = tolower(*p);
-		};
-
-		static inline void StringTrim(std::string* strToTrim)
-		{
-			std::string::size_type pos = strToTrim->find_last_not_of(' ');
-			if (pos != std::string::npos)
-			{
-				strToTrim->erase(pos + 1);
-				pos = strToTrim->find_first_not_of(' ');
-				if (pos != std::string::npos) strToTrim->erase(0, pos);
-			}
-			else strToTrim->erase(strToTrim->begin(), strToTrim->end());
-		};
-
-		static inline void StringTrim(std::string* strToTrim, char c)
-		{
-			std::string::size_type pos = strToTrim->find_last_not_of(c);
-			if (pos != std::string::npos)
-			{
-				strToTrim->erase(pos + 1);
-				pos = strToTrim->find_first_not_of(c);
-				if (pos != std::string::npos) strToTrim->erase(0, pos);
-			}
-			else strToTrim->erase(strToTrim->begin(), strToTrim->end());
-		};
-
 		static inline std::string StringToUpper(const std::string& strToConvert)
 		{
 			return StringToUpper(std::string(strToConvert));
@@ -120,29 +84,29 @@ static class Util
 
 		static inline std::string StringTrim(const std::string& strToTrim)
 		{
-			return StringTrim(std::string(strToTrim));
+			std::string str = std::string(strToTrim);
+			StringTrim(str);
+			return str;
 		}
 
-		static inline std::string StringTrim(std::string& strToTrim)
+		static inline void StringTrim(std::string& strToTrim)
 		{
-			std::string::size_type pos = strToTrim.find_last_not_of(' ');
-			if (pos != std::string::npos)
+			//all whitespace
+			std::vector<char> whitespace = { ' ', '\t', '\n', '\r', '\f', '\v' };
+			for (auto c : whitespace)
 			{
-				strToTrim.erase(pos + 1);
-				pos = strToTrim.find_first_not_of(' ');
-				if (pos != std::string::npos) strToTrim.erase(0, pos);
+				StringTrimEx(strToTrim, c);
 			}
-			else strToTrim.erase(strToTrim.begin(), strToTrim.end());
-
-			return strToTrim;
 		}
 
 		static inline std::string StringTrimEx(const std::string& strToTrim, const char c)
 		{
-			return StringTrimEx(std::string(strToTrim), c);
+			std::string str = std::string(strToTrim);
+			StringTrimEx(str, c);
+			return str;
 		}
 
-		static inline std::string StringTrimEx(std::string& strToTrim, const char c)
+		static inline void StringTrimEx(std::string& strToTrim, const char c)
 		{
 			std::string::size_type pos = strToTrim.find_last_not_of(c);
 			if (pos != std::string::npos)
@@ -152,7 +116,5 @@ static class Util
 				if (pos != std::string::npos) strToTrim.erase(0, pos);
 			}
 			else strToTrim.erase(strToTrim.begin(), strToTrim.end());
-
-			return strToTrim;
 		}
 };

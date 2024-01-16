@@ -33,9 +33,10 @@
 #define AUTOSET_API __declspec(dllimport) 
 #endif
 
-AUTOSET_API AutoSettingHandle AutoSet_Create(const std::string& path);
+AUTOSET_API AutoSettingHandle AutoSet_Create(const std::string& iniContents);
+AUTOSET_API AutoSettingHandle AutoSet_Create();
 AUTOSET_API void AutoSet_Destroy(AutoSettingHandle handle);
-AUTOSET_API void AutoSet_Save(AutoSettingHandle handle, const std::string& path, AutoSettingMode mode);
+AUTOSET_API std::string AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode);
 AUTOSET_API void AutoSetting_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
 AUTOSET_API void AutoSetting_DeleteGroup(AutoSettingHandle handle, const std::string& group);
 

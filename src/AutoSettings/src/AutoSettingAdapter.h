@@ -15,8 +15,9 @@ class AutoSettingAdapter
 {
 public:
 
-	static AutoSettingHandle AutoSet_Create(const std::string& path);	
-	static void AutoSet_Save(AutoSettingHandle handle, const std::string& path, AutoSettingMode mode);
+	static AutoSettingHandle AutoSet_Create(const std::string& iniContents);
+	static AutoSettingHandle AutoSet_Create();
+	static std::string AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode);
 	static void AutoSet_Destroy(AutoSettingHandle handle);
 	static void AutoSet_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
 	static void AutoSet_DeleteGroup(AutoSettingHandle handle, const std::string& group);

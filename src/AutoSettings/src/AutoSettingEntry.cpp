@@ -26,8 +26,8 @@ AutoSettingEntry& AutoSettingEntry::operator=(const AutoSettingEntry& other)
 };
 void AutoSettingEntry::SetKey(std::string key)
 {
-	Util::StringToUpper(&key);
-	Util::StringTrim(&key);
+	Util::StringToUpper(key);
+	Util::StringTrim(key);
 	m_Key = key;
 };
 void AutoSettingEntry::SetValue(IDator* pDator, bool DatorPersists)

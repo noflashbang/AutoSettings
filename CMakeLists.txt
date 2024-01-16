@@ -21,7 +21,18 @@ set(PROJECT_VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_
 set(CMAKE_DEBUG_POSTFIX d)
 
 #set the project name
-project ("AutoSettingProject" VERSION ${PROJECT_VERSION})
+project(
+    AutoSettingsIni
+    VERSION ${PROJECT_VERSION}
+    DESCRIPTION "Library for automatically creating and loading settings from ini files"
+    HOMEPAGE_URL "https://github.com/noflashbang/AutoSettings"
+    LANGUAGES CXX
+)
+
+message(VERBOSE "*")
+message(VERBOSE "* ${PROJECT_NAME} v${PROJECT_VERSION} (${CMAKE_BUILD_TYPE})")
+message(VERBOSE "* Copyright (c) 2024 noflashbang")
+message(VERBOSE "*")
 
 # Include all subprojects
 add_subdirectory ("src")

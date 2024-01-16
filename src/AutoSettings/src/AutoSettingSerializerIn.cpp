@@ -22,7 +22,9 @@ bool AutoSettingSerializerIn::IO(AutoSettingGroup& io)
 		//if line is a group
 		if (line[0] == '[')
 		{
-			io.SetName(Util::StringTrimEx(Util::StringTrimEx(line, '['), ']'));
+			Util::StringTrimEx(line, '[');
+			Util::StringTrimEx(line, ']');
+			io.SetName(line);
 		}
 
 		//if line is an entry

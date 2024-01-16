@@ -32,14 +32,20 @@ void AutoSetting::DeleteGroup(std::string Group)
 	DeleteGroupInternal(Group);
 };
 
-void AutoSetting::LoadSettings(std::string path)
+void AutoSetting::LoadSettings(std::string iniContent)
 {
-	LoadSettingsInternal(path);
+	LoadSettingsInternal(iniContent);
 }
 
 void AutoSetting::SaveSettings(std::string path, int Mode)
 {
 	SaveSettingsInternal(path, Mode);
+}
+
+std::string AutoSetting::GetIniContents(int Mode)
+{
+	SetSaveFlags(Mode);
+	return GetIniContentsInternal();
 }
 
 void AutoSetting::AddGroup(std::string Group, AutoSettingGroup* pGroup)
@@ -67,6 +73,8 @@ void AutoSetting::GetAllGroups(std::vector< AutoSettingGroup >* ppGroups)
 };
 void AutoSetting::SetSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists)
 {
+	Util::StringToUpper(Group);
+	Util::StringToUpper(Key);
 	AutoSettingGroup* pGroup = NULL;
 	if (FindGroupInternal(Group, &pGroup))
 	{
@@ -79,6 +87,8 @@ void AutoSetting::SetSettingInternal(std::string Group, std::string Key, IDator*
 }
 void AutoSetting::GetSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists)
 {
+	Util::StringToUpper(Group);
+	Util::StringToUpper(Key);
 	AutoSettingGroup* pGroup = NULL;
 	if (FindGroupInternal(Group, &pGroup))
 	{
@@ -91,6 +101,8 @@ void AutoSetting::GetSettingInternal(std::string Group, std::string Key, IDator*
 }
 bool AutoSetting::FindSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists)
 {
+	Util::StringToUpper(Group);
+	Util::StringToUpper(Key);
 	bool ret = false;
 	AutoSettingGroup* pGroup = NULL;
 	if (FindGroupInternal(Group, &pGroup))
@@ -102,10 +114,8 @@ bool AutoSetting::FindSettingInternal(std::string Group, std::string Key, IDator
 	}
 	return ret;
 };
-void AutoSetting::LoadSettingsInternal(std::string path)
+void AutoSetting::LoadSettingsInternal(std::string iniContent)
 {
-	m_FilePath = path;
-	std::string contents = Util::file_to_string(m_FilePath);
 	std::vector<std::string> groups;
 
 	bool findEnd = false;
@@ -114,9 +124,9 @@ void AutoSetting::LoadSettingsInternal(std::string path)
 	int pos2 = 0;
 
 	//look for each group
-	for (int ii = 0; ii < contents.length(); ii++)
+	for (int ii = 0; ii < iniContent.length(); ii++)
 	{
-		char c = contents[ii];
+		char c = iniContent[ii];
 		if (c == '[')
 		{
 			if (findEnd)
@@ -134,7 +144,7 @@ void AutoSetting::LoadSettingsInternal(std::string path)
 		if (proccess)
 		{
 			proccess = false;
-			std::string groupStr = contents.substr(pos + 1, pos2 - pos);
+			std::string groupStr = iniContent.substr(pos, pos2 - pos);
 			groups.push_back(groupStr);
 		}
 	}
@@ -142,8 +152,8 @@ void AutoSetting::LoadSettingsInternal(std::string path)
 	//add the last
 	if (findEnd)
 	{
-		pos2 = contents.length() - 1;
-		std::string groupStr = contents.substr(pos + 1, pos2 - pos);
+		pos2 = iniContent.length() - 1;
+		std::string groupStr = iniContent.substr(pos, pos2 - pos);
 		groups.push_back(groupStr);
 	}
 	
@@ -157,7 +167,17 @@ void AutoSetting::LoadSettingsInternal(std::string path)
 }
 void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 {
-	//do the cleaning of the vector first
+	SetSaveFlags(Mode);
+		
+	m_FilePath = path;
+	
+	std::string dataOut = GetIniContentsInternal();
+
+	Util::string_to_file(m_FilePath, dataOut);
+}
+
+void AutoSetting::SetSaveFlags(int mode)
+{
 	std::vector< AutoSettingGroup >::iterator iter;
 	for (iter = m_Groups.begin(); iter != m_Groups.end(); iter++)
 	{
@@ -170,7 +190,7 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 			std::vector< AutoSettingEntry* >::iterator iter2;
 			for (iter2 = entries.begin(); iter2 != entries.end(); iter2++)
 			{
-				if (AS_DATORED & Mode)
+				if (AS_DATORED & mode)
 				{
 					if ((*iter2)->GetDatored())
 					{
@@ -178,7 +198,7 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 						addedTrue = true;
 					}
 				}
-				if (AS_LOADED & Mode)
+				if (AS_LOADED & mode)
 				{
 					if ((*iter2)->GetLoaded())
 					{
@@ -186,7 +206,7 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 						addedTrue = true;
 					}
 				}
-				if (AS_ADDED & Mode)
+				if (AS_ADDED & mode)
 				{
 					if ((*iter2)->GetAdded())
 					{
@@ -194,7 +214,7 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 						addedTrue = true;
 					}
 				}
-				if (!(AS_UPDATE & Mode))
+				if (!(AS_UPDATE & mode))
 				{
 					(*iter2)->ClearDatored();
 				}
@@ -206,12 +226,12 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 			iter->SetSave(false);
 		}
 	}
+}
 
-	
-	m_FilePath = path;
-	
+std::string AutoSetting::GetIniContentsInternal()
+{
 	std::string dataOut;
-	for (auto &iter : m_Groups)
+	for (auto& iter : m_Groups)
 	{
 		if (iter.GetSave())
 		{
@@ -219,8 +239,9 @@ void AutoSetting::SaveSettingsInternal(std::string path, int Mode)
 			builder.IO(iter);
 		}
 	}
-	Util::string_to_file(m_FilePath, dataOut);
+	return dataOut;
 }
+
 void AutoSetting::AddKeyGroup(std::string Group, std::string Key, IDator* pDator, bool DatorPersists)
 {
 	AutoSettingGroup hold;

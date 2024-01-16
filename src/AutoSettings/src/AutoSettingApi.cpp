@@ -1,17 +1,21 @@
 #include "AutoSettingApi.h"
 #include "AutoSettingAdapter.h"
 
-AUTOSET_API AutoSettingHandle AutoSet_Create(const std::string& path)
+AUTOSET_API AutoSettingHandle AutoSet_Create(const std::string& iniContents)
 {
-	return AutoSettingAdapter::AutoSet_Create(path);
+	return AutoSettingAdapter::AutoSet_Create(iniContents);
+}
+AUTOSET_API AutoSettingHandle AutoSet_Create()
+{
+	return AutoSettingAdapter::AutoSet_Create();
 }
 AUTOSET_API void AutoSet_Destroy(AutoSettingHandle handle)
 {
 	AutoSettingAdapter::AutoSet_Destroy(handle);
 }
-AUTOSET_API void AutoSet_Save(AutoSettingHandle handle, const std::string& path, AutoSettingMode mode)
+AUTOSET_API std::string AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode)
 {
-	AutoSettingAdapter::AutoSet_Save(handle, path, mode);
+	return AutoSettingAdapter::AutoSet_GetIniContents(handle, mode);
 }
 AUTOSET_API void AutoSetting_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key)
 {
@@ -55,7 +59,7 @@ AUTOSET_API void AutoSet_SetSetting(AutoSettingHandle handle, const std::string&
 }
 AUTOSET_API void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value, bool attachDator)
 {
-	AutoSettingAdapter::AutoSet_SetSetting(handle, group, key, value, attachDator);
+	AutoSettingAdapter::AutoSet_GetSetting(handle, group, key, value, attachDator);
 }
 AUTOSET_API void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value, bool attachDator)
 {

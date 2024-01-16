@@ -2,22 +2,32 @@
 
 AutoSettingAdapter* AutoSettingAdapter::m_Instance = nullptr;
 
-AutoSettingHandle AutoSettingAdapter::AutoSet_Create(const std::string& path)
+AutoSettingHandle AutoSettingAdapter::AutoSet_Create(const std::string& iniContents)
 {
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	AutoSettingBundle bundle;
-	bundle.pAutoSetting = new AutoSetting(path);
+	bundle.pAutoSetting = new AutoSetting(iniContents);
 	return pAdapter->AddAutoSettingBundle(bundle);
 }
 
-void AutoSettingAdapter::AutoSet_Save(AutoSettingHandle handle, const std::string& path, AutoSettingMode mode)
+AutoSettingHandle AutoSettingAdapter::AutoSet_Create()
 {
+	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
+	AutoSettingBundle bundle;
+	bundle.pAutoSetting = new AutoSetting();
+	return pAdapter->AddAutoSettingBundle(bundle);
+}
+
+std::string AutoSettingAdapter::AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode)
+{
+	std::string ret;
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	AutoSettingBundle bundle = pAdapter->GetAutoSettingBundle(handle);
 	if (bundle.pAutoSetting != nullptr)
 	{
-		bundle.pAutoSetting->SaveSettings(path, mode);
+		ret = bundle.pAutoSetting->GetIniContents(mode);
 	}
+	return ret;
 }
 
 void AutoSettingAdapter::AutoSet_Destroy(AutoSettingHandle handle)

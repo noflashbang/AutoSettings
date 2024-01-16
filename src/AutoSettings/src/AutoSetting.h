@@ -27,13 +27,10 @@ public:
 	{
 		m_FilePath = "";
 	};
-	AutoSetting(char* path)
+
+	AutoSetting(std::string iniContent)
 	{
-		LoadSettings(path);
-	};
-	AutoSetting(std::string path)
-	{
-		LoadSettings(path);
+		LoadSettings(iniContent);
 	};
 	~AutoSetting()
 	{
@@ -60,6 +57,9 @@ public:
 	//creates an ini file
 	void SaveSettings(std::string path, int Mode = AS_ALL);
 
+	//retrives the ini file contents
+	std::string GetIniContents(int Mode = AS_ALL);
+
 	//Add/replace a group
 	void AddGroup(std::string Group, AutoSettingGroup* pGroup);
 
@@ -73,8 +73,6 @@ public:
 	void SetSettingDirect(std::string Group, std::string Key, T& Data)
 	{
 		Dator<T> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		SetSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -82,8 +80,6 @@ public:
 	void SetSettingDirect(std::string Group, std::string Key, std::vector<T>& Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		SetSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -91,8 +87,6 @@ public:
 	void GetSettingDirect(std::string Group, std::string Key, T& Data)
 	{
 		Dator<T> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		GetSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -100,8 +94,6 @@ public:
 	void GetSettingDirect(std::string Group, std::string Key, std::vector<T>& Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		GetSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -109,8 +101,6 @@ public:
 	bool FindSettingDirect(std::string Group, std::string Key, T& Data)
 	{
 		Dator<T> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		return FindSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -118,8 +108,6 @@ public:
 	bool FindSettingDirect(std::string Group, std::string Key, T* Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
-		Util::StringToUpper(&Group);
-		Util::StringToUpper(&Key);
 		return FindSettingInternal(Group, Key, &typeDator, false);
 	};
 
@@ -129,6 +117,8 @@ protected:
 	bool FindSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
 	void LoadSettingsInternal(std::string path);
 	void SaveSettingsInternal(std::string path, int Mode);
+	void SetSaveFlags(int Mode);
+	std::string GetIniContentsInternal();
 	void AddKeyGroup(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
 	bool FindGroupInternal(std::string Group, AutoSettingGroup** ppGroup);
 	void DeleteKeyGroup(std::string Group, std::string Key);
