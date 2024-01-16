@@ -1,9 +1,11 @@
 
 add_compile_definitions(AUTOSET_EXPORTS)
 
+cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH PARENT_DIR)
+
 set( externHeaders 
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/AutoSettings/AutoSettingApi.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/AutoSettings/AutoSettingCore.h
+    ${PARENT_DIR}/include/AutoSettings/AutoSettingApi.h
+    ${PARENT_DIR}/include/AutoSettings/AutoSettingCore.h
 )
 
 set( libHeaders 
@@ -42,7 +44,7 @@ target_include_directories( AutoSettings PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src
 
 target_sources( AutoSettings PRIVATE ${libSource} ${libHeaders} )
 
-target_sources( AutoSettings PUBLIC FILE_SET HEADERS BASE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/include/AutoSettings FILES ${externHeaders} )
+target_sources( AutoSettings PUBLIC FILE_SET HEADERS BASE_DIRS ${PARENT_DIR}/include/AutoSettings FILES ${externHeaders} )
 
 install(TARGETS AutoSettings
         RUNTIME DESTINATION bin          
