@@ -1,0 +1,121 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "src",
+					"childIndexes" : 
+					[
+						2,
+						3
+					],
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-src-Debug-c94b7c2814d5a21df52c.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "src"
+				},
+				{
+					"build" : "src/AutoSettings",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-src.AutoSettings-Debug-f9c6d011da454a6088cb.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/AutoSettings",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "src/AutoSettingTest",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-src.AutoSettingTest-Debug-e201ebb2e48bc38267d1.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.8"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 0,
+					"source" : "src/AutoSettingTest",
+					"targetIndexes" : 
+					[
+						0
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"name" : "AutoSettingProject",
+					"targetIndexes" : 
+					[
+						0,
+						1
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 3,
+					"id" : "AutoSettingTest::@3b9e1ba8f3eb2f92a6b5",
+					"jsonFile" : "target-AutoSettingTest-Debug-b82c9645527840563ed5.json",
+					"name" : "AutoSettingTest",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "AutoSettings::@34e7b4cda24b950ba600",
+					"jsonFile" : "target-AutoSettings-Debug-d9729b0ce37994908123.json",
+					"name" : "AutoSettings",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "C:/Users/nofla/source/repos/AutoSettings/out/build/x64-debug",
+		"source" : "C:/Users/nofla/source/repos/AutoSettings"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 6
+	}
+}

@@ -1,0 +1,80 @@
+{
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"install"
+		],
+		"files" : 
+		[
+			"src/AutoSettings/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 47,
+				"parent" : 0
+			}
+		]
+	},
+	"installers" : 
+	[
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "lib",
+			"paths" : 
+			[
+				"src/AutoSettings/AutoSettingsd.lib"
+			],
+			"targetId" : "AutoSettings::@34e7b4cda24b950ba600",
+			"targetIndex" : 1,
+			"targetIsImportLibrary" : true,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Unspecified",
+			"destination" : "bin",
+			"paths" : 
+			[
+				"src/AutoSettings/AutoSettingsd.dll"
+			],
+			"targetId" : "AutoSettings::@34e7b4cda24b950ba600",
+			"targetIndex" : 1,
+			"type" : "target"
+		},
+		{
+			"backtrace" : 1,
+			"component" : "Development",
+			"destination" : "include",
+			"fileSetDirectories" : 
+			[
+				"src/AutoSettings/include/AutoSettings"
+			],
+			"fileSetName" : "HEADERS",
+			"fileSetTarget" : 
+			{
+				"id" : "AutoSettings::@34e7b4cda24b950ba600",
+				"index" : 1
+			},
+			"fileSetType" : "HEADERS",
+			"paths" : 
+			[
+				"src/AutoSettings/include/AutoSettings/AutoSettingApi.h",
+				"src/AutoSettings/include/AutoSettings/AutoSettingCore.h"
+			],
+			"type" : "fileSet"
+		}
+	],
+	"paths" : 
+	{
+		"build" : "src/AutoSettings",
+		"source" : "src/AutoSettings"
+	}
+}
