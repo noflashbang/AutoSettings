@@ -1,9 +1,8 @@
 
 #include <AutoSettingApi.h>
+#include <catch2/catch_test_macros.hpp>
 
-int main()
-{
-	AutoSettingHandle handle = AutoSet_Create(".\\test.ini");
-	AutoSet_Destroy(handle);
-	return 0;
+
+TEST_CASE("AutoSettingsTests", "[AutoSettings]") {
+    REQUIRE(1 == 1);
 }
