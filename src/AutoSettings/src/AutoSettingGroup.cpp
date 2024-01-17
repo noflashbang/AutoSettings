@@ -86,10 +86,6 @@ void AutoSettingGroup::GetEntry(std::string Key, IDator* pDator, bool DatorPersi
 	}
 	if (pHold != NULL)
 	{
-		if (pHold->GetDatored())
-		{
-			pHold->Update();
-		}
 		pDator->SetValue(pHold->GetValue());
 	}
 	else

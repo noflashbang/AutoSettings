@@ -70,6 +70,7 @@ std::string AutoSettingEntry::GetKey()
 };
 std::string AutoSettingEntry::GetValue()
 {
+	Update(); //update the value from the dator if it exists
 	return m_Value;
 };
 bool AutoSettingEntry::GetDatored()

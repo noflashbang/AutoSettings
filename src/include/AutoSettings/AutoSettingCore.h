@@ -21,8 +21,9 @@
 //SOFTWARE.
 
 #pragma once 
+#include <cstdint>
 
-typedef void* AutoSettingHandle;
+typedef std::uintptr_t AutoSettingHandle;
 typedef int AutoSettingMode;
 
 #define AS_MODE_ALL    (-1)

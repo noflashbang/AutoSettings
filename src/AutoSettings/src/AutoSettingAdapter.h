@@ -5,6 +5,7 @@
 #include "AutoSetting.h"
 #include "AutoSettingCore.h"
 
+
 struct AutoSettingBundle
 {
 	AutoSetting* pAutoSetting;
@@ -84,5 +85,6 @@ private:
 	AutoSettingBundle GetAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	void RemoveAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	std::vector<AutoSettingBundle> m_AutoSettings;
+	std::mutex m_mtx;
 };
 

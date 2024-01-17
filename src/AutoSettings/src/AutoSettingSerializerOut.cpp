@@ -21,7 +21,6 @@ bool AutoSettingSerializerOut::IO(AutoSettingGroup& io)
 
 	for (AutoSettingEntry* pEntry : Entries)
 	{
-		pEntry->Update();
 		if (pEntry->GetSave())
 		{
 			AutoSettingEntry hold = (*pEntry);

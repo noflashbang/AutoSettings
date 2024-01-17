@@ -7,7 +7,7 @@ AutoSettingHandle AutoSettingAdapter::AutoSet_Create(const std::string& iniConte
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	AutoSettingBundle bundle;
 	bundle.pAutoSetting = new AutoSetting(iniContents);
-	return pAdapter->AddAutoSettingBundle(bundle);
+	return pAdapter->AddAutoSettingBundle(bundle);	
 }
 
 AutoSettingHandle AutoSettingAdapter::AutoSet_Create()
@@ -244,18 +244,24 @@ AutoSettingAdapter::~AutoSettingAdapter()
 
 AutoSettingHandle AutoSettingAdapter::AddAutoSettingBundle(AutoSettingBundle bundle)
 {
-	m_AutoSettings.push_back(bundle);
-	return (AutoSettingHandle)bundle.pAutoSetting;
+	std::lock_guard<std::mutex> lock(m_mtx);
+	{
+		m_AutoSettings.push_back(bundle);
+		return (AutoSettingHandle)bundle.pAutoSetting;
+	}
 }
 AutoSettingBundle AutoSettingAdapter::GetAutoSettingBundle(AutoSettingHandle hAutoSetting)
 {
-	//look for the handle in the list
-	std::vector<AutoSettingBundle>::iterator iter;
-	for (iter = m_AutoSettings.begin(); iter != m_AutoSettings.end(); iter++)
+	std::lock_guard<std::mutex> lock(m_mtx);
 	{
-		if (iter->pAutoSetting == hAutoSetting)
+		//look for the handle in the list
+		std::vector<AutoSettingBundle>::iterator iter;
+		for (iter = m_AutoSettings.begin(); iter != m_AutoSettings.end(); iter++)
 		{
-			return (*iter);
+			if (iter->pAutoSetting == reinterpret_cast<AutoSetting*>(hAutoSetting))
+			{
+				return (*iter);
+			}
 		}
 	}
 	//if we get here, we didn't find it
@@ -266,23 +272,26 @@ AutoSettingBundle AutoSettingAdapter::GetAutoSettingBundle(AutoSettingHandle hAu
 }
 void AutoSettingAdapter::RemoveAutoSettingBundle(AutoSettingHandle hAutoSetting)
 {
-	//remove the handle from the list
-	std::vector<AutoSettingBundle>::iterator iter;
-	for (iter = m_AutoSettings.begin(); iter != m_AutoSettings.end(); iter++)
+	std::lock_guard<std::mutex> lock(m_mtx);
 	{
-		if (iter->pAutoSetting == hAutoSetting)
+		//remove the handle from the list
+		std::vector<AutoSettingBundle>::iterator iter;
+		for (iter = m_AutoSettings.begin(); iter != m_AutoSettings.end(); iter++)
 		{
-			//delete the AutoSetting
-			delete iter->pAutoSetting;
-			 //delete all dators
-			std::vector<IDator*>::iterator iterDator;
-			for (iterDator = iter->pDators.begin(); iterDator != iter->pDators.end(); iterDator++)
+			if (iter->pAutoSetting == reinterpret_cast<AutoSetting*>(hAutoSetting))
 			{
-				delete (*iterDator);
-			}
+				//delete the AutoSetting
+				delete iter->pAutoSetting;
+				//delete all dators
+				std::vector<IDator*>::iterator iterDator;
+				for (iterDator = iter->pDators.begin(); iterDator != iter->pDators.end(); iterDator++)
+				{
+					delete (*iterDator);
+				}
 
-			m_AutoSettings.erase(iter);
-			break;
+				m_AutoSettings.erase(iter);
+				break;
+			}
 		}
 	}
 }

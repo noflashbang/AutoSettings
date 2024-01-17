@@ -21,6 +21,10 @@ set( externHeaders
 
 set( testSource 
    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_INT_Test.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_DOUBLE_Test.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_BOOL_Test.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_STRING_Test.cpp
 )
 
 add_executable(AutoSettingTest ${testSource} ${externHeaders})
