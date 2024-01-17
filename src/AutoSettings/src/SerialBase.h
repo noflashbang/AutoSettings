@@ -55,10 +55,11 @@ protected:
 	{
 		int ii = 0;
 		auto tokens = Util::StringSplit(*m_Data, ArraySeperator);
+		io.resize(tokens.size());
 		for(auto token : tokens)
 		{
 			S in(&token);
-			T holder = io.at(ii);
+			T holder;
 			in.IO(holder);
 			io.at(ii) = holder;
 			ii++;

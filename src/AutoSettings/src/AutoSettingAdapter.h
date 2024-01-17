@@ -8,8 +8,9 @@
 
 struct AutoSettingBundle
 {
-	AutoSetting* pAutoSetting;
-	std::vector<IDator*> pDators;
+	AutoSettingHandle hAutoSetting;
+	std::unique_ptr<AutoSetting> pAutoSetting;
+	std::vector<std::unique_ptr<IDator>> Dators;
 };
 
 class AutoSettingAdapter
@@ -43,34 +44,32 @@ public:
 protected:
 
 	template<typename T>
-	void SetSetting(AutoSettingBundle& bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
+	void SetSetting(const AutoSettingBundle* bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
 	{
 		if (attachDator)
 		{
 			// Create a dator for this setting
-			IDator* pDator = new Dator<T>(Data);
-			bundle.pDators.push_back(pDator);
-			bundle.pAutoSetting->SetSetting(Group, Key, pDator);
+			bundle->Dators.push_back(std::make_unique<IDator>(new Dator<T>(Data)));
+			bundle->pAutoSetting->SetSetting(Group, Key, Dator);
 		}
 		else
 		{
-			bundle.pAutoSetting->SetSettingDirect(Group, Key, Data);
+			bundle->pAutoSetting->SetSettingDirect(Group, Key, Data);
 		}
 	};
 
 	template<typename T>
-	void GetSetting(AutoSettingBundle& bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
+	void GetSetting(const AutoSettingBundle* bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
 	{
 		if (attachDator)
 		{
 			// Create a dator for this setting
-			IDator* pDator = new Dator<T>(Data);
-			bundle.pDators.push_back(pDator);
-			bundle.pAutoSetting->GetSetting(Group, Key, pDator);
+			bundle->Dators.push_back(std::make_unique<IDator>(new Dator<T>(Data)));
+			bundle->pAutoSetting->GetSetting(Group, Key, pDator);
 		}
 		else
 		{
-			bundle.pAutoSetting->GetSettingDirect(Group, Key, Data);
+			bundle->pAutoSetting->GetSettingDirect(Group, Key, Data);
 		}
 	};
 
@@ -82,7 +81,7 @@ private:
 	static AutoSettingAdapter* m_Instance;
 
 	AutoSettingHandle AddAutoSettingBundle(AutoSettingBundle bundle);
-	AutoSettingBundle GetAutoSettingBundle(AutoSettingHandle hAutoSetting);
+	AutoSettingBundle* GetAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	void RemoveAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	std::vector<AutoSettingBundle> m_AutoSettings;
 	std::mutex m_mtx;

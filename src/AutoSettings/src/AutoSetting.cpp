@@ -146,6 +146,8 @@ void AutoSetting::LoadSettingsInternal(std::string iniContent)
 			proccess = false;
 			std::string groupStr = iniContent.substr(pos, pos2 - pos);
 			groups.push_back(groupStr);
+			pos = ii;
+			findEnd = true;
 		}
 	}
 
