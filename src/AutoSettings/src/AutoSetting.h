@@ -11,122 +11,99 @@
 #include "AutoSettingSerializerIn.h"
 #include "AutoSettingSerializerOut.h"
 
-enum AUTOSETTING_CODE
-{
-	AS_ALL = -1,
-	AS_DATORED = 1,
-	AS_LOADED = 2,
-	AS_ADDED = 4,
-	AS_UPDATE = 8
-};
-
 class AutoSetting
 {
 public:
 	AutoSetting()
 	{
-		m_FilePath = "";
 	};
 
 	AutoSetting(std::string iniContent)
 	{
 		LoadSettings(iniContent);
 	};
+
 	~AutoSetting()
 	{
 	};
 
 	//sets a value -> if not found it will be added, if found the ini value will be updated
-	void SetSetting(std::string Group, std::string Key, IDator* pDator);
+	void SetSetting(const std::string& group, const std::string& key, IDator* pDator);
 
 	//retrives a value -> if not found it will be added, if found the dator value will be updated
-	void GetSetting(std::string Group, std::string Key, IDator* pDator);
+	void GetSetting(const std::string& group, const std::string& key, IDator* pDator);
 
-	//retrives a value -> if not found it will not be added, if found the dator value will be updated (true on success)
-	bool FindSetting(std::string Group, std::string Key, IDator* pDator);
+	//retrives a value -> if not found it will not be added, if found the dator value will be updated (true on found)
+	bool FindSetting(const std::string& group, const std::string& key, IDator* pDator);
 
-	//removes a setting
-	void DeleteSetting(std::string Group, std::string Key);
+	void DeleteSetting(const std::string& group, const std::string& key);
 
-	//removes a group
-	void DeleteGroup(std::string Group);
+	void DeleteGroup(const std::string& group);
 
-	//parses an ini file
-	void LoadSettings(std::string path);
+	void LoadSettings(const std::string& iniContent);
 
-	//creates an ini file
-	void SaveSettings(std::string path, int Mode = AS_ALL);
-
-	//retrives the ini file contents
-	std::string GetIniContents(int Mode = AS_ALL);
-
-	//Add/replace a group
-	void AddGroup(std::string Group, AutoSettingGroup* pGroup);
-
-	//retrives a group (true on success)
-	bool FindGroup(std::string Group, AutoSettingGroup* pGroup);
-
-	//retrives all the groups
-	void GetAllGroups(std::vector<AutoSettingGroup>* pGroups);
+	std::string GetIniContents();
 
 	template<typename T>
-	void SetSettingDirect(std::string Group, std::string Key, T& Data)
+	void SetSetting(const std::string& group, const std::string& key, T& Data)
 	{
 		Dator<T> typeDator(Data);
 		SetSettingInternal(Group, Key, &typeDator, false);
 	};
 
 	template<typename T>
-	void SetSettingDirect(std::string Group, std::string Key, std::vector<T>& Data)
+	void SetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
 		SetSettingInternal(Group, Key, &typeDator, false);
 	};
 
 	template<typename T>
-	void GetSettingDirect(std::string Group, std::string Key, T& Data)
+	void GetSetting(const std::string& group, const std::string& key, T& Data)
 	{
 		Dator<T> typeDator(Data);
 		GetSettingInternal(Group, Key, &typeDator, false);
 	};
 
 	template<typename T>
-	void GetSettingDirect(std::string Group, std::string Key, std::vector<T>& Data)
+	void GetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
 		GetSettingInternal(Group, Key, &typeDator, false);
 	};
 
 	template<typename T>
-	bool FindSettingDirect(std::string Group, std::string Key, T& Data)
+	bool FindSetting(const std::string& group, const std::string& key, T& Data)
 	{
 		Dator<T> typeDator(Data);
 		return FindSettingInternal(Group, Key, &typeDator, false);
 	};
 
 	template<typename T>
-	bool FindSettingDirect(std::string Group, std::string Key, T* Data)
+	bool FindSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
 	{
 		Dator<std::vector<T>> typeDator(Data);
 		return FindSettingInternal(Group, Key, &typeDator, false);
 	};
 
 protected:
-	void SetSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
-	void GetSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
-	bool FindSettingInternal(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
-	void LoadSettingsInternal(std::string path);
-	void SaveSettingsInternal(std::string path, int Mode);
-	void SetSaveFlags(int Mode);
+
+	void SetSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
+	void GetSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
+	bool FindSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
+
+	void LoadSettingsInternal(const std::string& iniContent);
+
 	std::string GetIniContentsInternal();
-	void AddKeyGroup(std::string Group, std::string Key, IDator* pDator, bool DatorPersists = false);
-	bool FindGroupInternal(std::string Group, AutoSettingGroup** ppGroup);
-	void DeleteKeyGroup(std::string Group, std::string Key);
-	void AddGroupInternal(AutoSettingGroup* pGroup);
-	void DeleteGroupInternal(std::string Group);
+	
+	void AddKeyGroup(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
+	
+	bool FindGroupInternal(const std::string& group, AutoSettingGroup** ppGroup);
+	void DeleteKeyGroup(const std::string& group, const std::string& key);
+	
+	void DeleteGroupInternal(const std::string& group);
 
 private:
-	std::string m_FilePath;
 	std::vector<AutoSettingGroup> m_Groups;
 };
 
