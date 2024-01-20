@@ -13,9 +13,9 @@ AUTOSET_API void AutoSetting_Destroy(const AutoSettingHandle handle)
 {
 	AutoSettingAdapter::AutoSet_Destroy(handle);
 }
-AUTOSET_API std::string AutoSetting_GetIniContents(const AutoSettingHandle handle, AutoSettingMode mode)
+AUTOSET_API std::string AutoSetting_GetIniContents(const AutoSettingHandle handle)
 {
-	return AutoSettingAdapter::AutoSet_GetIniContents(handle, mode);
+	return AutoSettingAdapter::AutoSet_GetIniContents(handle);
 }
 AUTOSET_API void AutoSetting_DeleteSetting(const AutoSettingHandle handle, const std::string& group, const std::string& key)
 {

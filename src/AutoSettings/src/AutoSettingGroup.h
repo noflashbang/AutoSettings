@@ -1,7 +1,7 @@
 #pragma once
 
 #include "StandardLib.h"
-#include "Util.h"
+#include "AS_String.h"
 #include "IDator.h"
 #include "Dator.h"
 #include "AutoSettingEntry.h"
@@ -12,30 +12,28 @@ public:
 	AutoSettingGroup()
 	{
 		m_GroupName = "";
-		m_Save = false;
 	};
 	~AutoSettingGroup() {};
 
 	AutoSettingGroup(const AutoSettingGroup& other);
 	AutoSettingGroup& operator=(const AutoSettingGroup& other);
 
-	void SetName(const std::string& name);
+	void SetName(const AS_String& name);
 
 	void AddEntry(AutoSettingEntry* pEntry);
 
-	void SetEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
+	void SetEntry(const AS_String& key, const std::shared_ptr<IDator> pDator);
 
-	void GetEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
+	void GetEntry(const AS_String& key, const std::shared_ptr<IDator> pDator);
 
-	bool FindEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
-	void DeleteEntry(const std::string& key);
+	bool FindEntry(const AS_String& key, const std::shared_ptr<IDator> pDator);
+	void DeleteEntry(const AS_String& key);
 
-	std::string GetName();
+	AS_String GetName();
 
 	void GetEntries(std::vector<AutoSettingEntry*>& entries);
 
 private:
-	std::string m_GroupName;
+	AS_String m_GroupName;
 	std::vector<AutoSettingEntry> m_Entries;
-	bool m_Save;
 };

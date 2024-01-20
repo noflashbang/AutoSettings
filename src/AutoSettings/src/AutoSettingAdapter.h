@@ -41,7 +41,7 @@ public:
 
 	static AutoSettingHandle AutoSet_Create(const std::string& iniContents);
 	static AutoSettingHandle AutoSet_Create();
-	static std::string AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode);
+	static std::string AutoSet_GetIniContents(AutoSettingHandle handle);
 	static void AutoSet_Destroy(AutoSettingHandle handle);
 	static void AutoSet_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
 	static void AutoSet_DeleteGroup(AutoSettingHandle handle, const std::string& group);

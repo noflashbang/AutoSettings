@@ -1,47 +1,38 @@
 #include "AutoSetting.h"
 
-void AutoSetting::SetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
+void AutoSetting::SetSetting(const AS_String& group, const AS_String& key, const std::shared_ptr<IDator> pDator)
 {
-	std::string groupUp = Util::StringToUpper(group);
-	std::string keyUp = Util::StringToUpper(key);
-
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(groupUp, &pGroup))
+	if (FindGroupInternal(group, &pGroup))
 	{
-		pGroup->SetEntry(keyUp, pDator);
+		pGroup->SetEntry(key, pDator);
 	}
 	else
 	{
-		AddKeyGroup(groupUp, keyUp, pDator);
+		AddKeyGroup(group, key, pDator);
 	}
 }
 
-void AutoSetting::GetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
+void AutoSetting::GetSetting(const AS_String& group, const AS_String& key, const std::shared_ptr<IDator> pDator)
 {
-	std::string groupUp = Util::StringToUpper(group);
-	std::string keyUp = Util::StringToUpper(key);
-
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(groupUp, &pGroup))
+	if (FindGroupInternal(group, &pGroup))
 	{
-		pGroup->GetEntry(keyUp, pDator);
+		pGroup->GetEntry(key, pDator);
 	}
 	else
 	{
-		AddKeyGroup(groupUp, keyUp, pDator);
+		AddKeyGroup(group, key, pDator);
 	}
 }
 
-bool AutoSetting::FindSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
+bool AutoSetting::FindSetting(const AS_String& group, const AS_String& key, const std::shared_ptr<IDator> pDator)
 {
-	std::string groupUp = Util::StringToUpper(group);
-	std::string keyUp = Util::StringToUpper(key);
-
 	bool ret = false;
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(groupUp, &pGroup))
+	if (FindGroupInternal(group, &pGroup))
 	{
-		if (pGroup->FindEntry(keyUp, pDator))
+		if (pGroup->FindEntry(key, pDator))
 		{
 			ret = true;
 		}
@@ -49,7 +40,7 @@ bool AutoSetting::FindSetting(const std::string& group, const std::string& key, 
 	return ret;
 }
 
-void AutoSetting::DeleteSetting(const std::string& group, const std::string& key)
+void AutoSetting::DeleteSetting(const AS_String& group, const AS_String& key)
 {
 	DeleteKeyGroup(group, key);
 }
@@ -59,7 +50,7 @@ void AutoSetting::LoadSettings(const std::string& iniContent)
 	LoadSettingsInternal(iniContent);
 }
 
-void AutoSetting::DeleteGroup(const std::string& group)
+void AutoSetting::DeleteGroup(const AS_String& group)
 {
 	DeleteGroupInternal(group);
 }
@@ -133,7 +124,7 @@ std::string AutoSetting::GetIniContentsInternal()
 	return dataOut;
 }
 
-void AutoSetting::AddKeyGroup(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
+void AutoSetting::AddKeyGroup(const AS_String& group, const AS_String& key, const std::shared_ptr<IDator> pDator)
 {
 	AutoSettingGroup hold;
 	hold.SetEntry(key, pDator);
@@ -141,7 +132,7 @@ void AutoSetting::AddKeyGroup(const std::string& group, const std::string& key, 
 	m_Groups.push_back(hold);
 }
 
-bool AutoSetting::FindGroupInternal(const std::string& group, AutoSettingGroup** ppGroup)
+bool AutoSetting::FindGroupInternal(const AS_String& group, AutoSettingGroup** ppGroup)
 {
 	bool ret = false;
 	std::vector< AutoSettingGroup >::iterator iter;
@@ -157,7 +148,7 @@ bool AutoSetting::FindGroupInternal(const std::string& group, AutoSettingGroup**
 	return ret;
 }
 
-void AutoSetting::DeleteKeyGroup(const std::string& group, const std::string& key)
+void AutoSetting::DeleteKeyGroup(const AS_String& group, const AS_String& key)
 {
 	AutoSettingGroup* pGroup = NULL;
 	if (FindGroupInternal(group, &pGroup))
@@ -166,7 +157,7 @@ void AutoSetting::DeleteKeyGroup(const std::string& group, const std::string& ke
 	}
 }
 
-void AutoSetting::DeleteGroupInternal(const std::string& group)
+void AutoSetting::DeleteGroupInternal(const AS_String& group)
 {
 	std::vector< AutoSettingGroup >::iterator iter;
 	for (iter = m_Groups.begin(); iter != m_Groups.end(); iter++)

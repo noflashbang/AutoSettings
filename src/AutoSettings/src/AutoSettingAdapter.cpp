@@ -25,7 +25,7 @@ AutoSettingHandle AutoSettingAdapter::AutoSet_Create()
 	return pAdapter->AddAutoSettingBundle(bundle);
 }
 
-std::string AutoSettingAdapter::AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode)
+std::string AutoSettingAdapter::AutoSet_GetIniContents(AutoSettingHandle handle)
 {
 	std::string ret;
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();

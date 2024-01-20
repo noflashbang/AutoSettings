@@ -1,11 +1,8 @@
 #include "AutoSettingEntry.h"
 
-AutoSettingEntry::AutoSettingEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
+AutoSettingEntry::AutoSettingEntry(const AS_String& key, const std::shared_ptr<IDator> pDator)
 {
 	m_Key = key;
-	Util::StringToUpper(m_Key);
-	Util::StringTrim(m_Key);
-
 	m_Value = "";
 	m_pDator = std::weak_ptr(pDator);
 	Update();
@@ -31,11 +28,9 @@ AutoSettingEntry& AutoSettingEntry::operator=(const AutoSettingEntry& other)
 	return (*this);
 };
 
-void AutoSettingEntry::SetKey(const std::string& key)
+void AutoSettingEntry::SetKey(const AS_String& key)
 {
 	m_Key = key;
-	Util::StringToUpper(m_Key);
-	Util::StringTrim(m_Key);
 };
 void AutoSettingEntry::SetValue(const std::shared_ptr<IDator> pDator)
 {
@@ -47,7 +42,7 @@ void AutoSettingEntry::SetValue(const std::string& Value)
 	m_Value = Value;
 };
 
-std::string AutoSettingEntry::GetKey()
+AS_String AutoSettingEntry::GetKey()
 {
 	return m_Key;
 };

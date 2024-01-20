@@ -2,7 +2,7 @@
 
 #include "StandardLib.h"
 
-static class Util
+class Util
 {
 	public:
 

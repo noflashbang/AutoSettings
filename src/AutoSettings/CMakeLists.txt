@@ -23,6 +23,7 @@ set( libHeaders
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SerialOut.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/StandardLib.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Util.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_String.h
 )
 
 set( libSource
@@ -36,6 +37,7 @@ set( libSource
 	${CMAKE_CURRENT_SOURCE_DIR}/src/SerialBase.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/SerialIn.cpp
 	${CMAKE_CURRENT_SOURCE_DIR}/src/SerialOut.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/AS_String.cpp
 )
 
 add_library (AutoSettings SHARED ${libSource} ${libHeaders} ${externHeaders}) 

@@ -38,7 +38,7 @@
 AUTOSET_API AutoSettingHandle AutoSetting_Create(const std::string& iniContents);
 AUTOSET_API AutoSettingHandle AutoSetting_Create();
 AUTOSET_API void AutoSetting_Destroy(const AutoSettingHandle handle);
-AUTOSET_API std::string AutoSetting_GetIniContents(const AutoSettingHandle handle, AutoSettingMode mode);
+AUTOSET_API std::string AutoSetting_GetIniContents(const AutoSettingHandle handle);
 AUTOSET_API void AutoSetting_DeleteSetting(const AutoSettingHandle handle, const std::string& group, const std::string& key);
 AUTOSET_API void AutoSetting_DeleteGroup(const AutoSettingHandle handle, const std::string& group);
 
