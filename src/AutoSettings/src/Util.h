@@ -58,7 +58,9 @@ static class Util
 
 		static inline std::string StringToUpper(const std::string& strToConvert)
 		{
-			return StringToUpper(std::string(strToConvert));
+			std::string str(strToConvert);
+			StringToUpper(str);
+			return str;
 		}
 
 		static inline std::string StringToUpper(std::string& strToConvert)

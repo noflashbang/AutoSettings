@@ -2,44 +2,46 @@
 
 void AutoSetting::SetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	Util::StringToUpper(group);
-	Util::StringToUpper(key);
+	std::string groupUp = Util::StringToUpper(group);
+	std::string keyUp = Util::StringToUpper(key);
 
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(group, &pGroup))
+	if (FindGroupInternal(groupUp, &pGroup))
 	{
-		pGroup->SetEntry(key, pDator);
+		pGroup->SetEntry(keyUp, pDator);
 	}
 	else
 	{
-		AddKeyGroup(group, key, pDator);
+		AddKeyGroup(groupUp, keyUp, pDator);
 	}
 }
 
 void AutoSetting::GetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	Util::StringToUpper(group);
-	Util::StringToUpper(key);
+	std::string groupUp = Util::StringToUpper(group);
+	std::string keyUp = Util::StringToUpper(key);
+
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(group, &pGroup))
+	if (FindGroupInternal(groupUp, &pGroup))
 	{
-		pGroup->GetEntry(key, pDator);
+		pGroup->GetEntry(keyUp, pDator);
 	}
 	else
 	{
-		AddKeyGroup(group, key, pDator);
+		AddKeyGroup(groupUp, keyUp, pDator);
 	}
 }
 
 bool AutoSetting::FindSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	Util::StringToUpper(group);
-	Util::StringToUpper(key);
+	std::string groupUp = Util::StringToUpper(group);
+	std::string keyUp = Util::StringToUpper(key);
+
 	bool ret = false;
 	AutoSettingGroup* pGroup = NULL;
-	if (FindGroupInternal(group, &pGroup))
+	if (FindGroupInternal(groupUp, &pGroup))
 	{
-		if (pGroup->FindEntry(key, pDator))
+		if (pGroup->FindEntry(keyUp, pDator))
 		{
 			ret = true;
 		}

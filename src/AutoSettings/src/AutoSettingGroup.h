@@ -30,10 +30,7 @@ public:
 	bool FindEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
 	void DeleteEntry(const std::string& key);
 
-	void SetSave(bool Save);
-
 	std::string GetName();
-	std::string GetEntries();
 
 	void GetEntries(std::vector<AutoSettingEntry*>& entries);
 

@@ -18,9 +18,10 @@ AutoSettingGroup& AutoSettingGroup::operator=(const AutoSettingGroup& other)
 };
 void AutoSettingGroup::SetName(const std::string& name)
 {
-	Util::StringToUpper(name);
-	Util::StringTrim(name);
-	m_GroupName = name;
+
+	std::string myName = Util::StringToUpper(name);
+	Util::StringTrim(myName);
+	m_GroupName = myName;
 };
 
 void AutoSettingGroup::AddEntry(AutoSettingEntry* pEntry)
@@ -48,11 +49,11 @@ void AutoSettingGroup::AddEntry(AutoSettingEntry* pEntry)
 void AutoSettingGroup::SetEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
 	AutoSettingEntry* pHold = nullptr;
-	Util::StringToUpper(key);
+	std::string keyUp = Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == key)
+		if (iter->GetKey() == keyUp)
 		{
 			pHold = &(*iter);
 			break;
@@ -64,7 +65,7 @@ void AutoSettingGroup::SetEntry(const std::string& key, const std::shared_ptr<ID
 	}
 	else
 	{
-		AutoSettingEntry entry(key, pDator);
+		AutoSettingEntry entry(keyUp, pDator);
 		m_Entries.push_back(entry);
 	}
 };
@@ -72,11 +73,11 @@ void AutoSettingGroup::SetEntry(const std::string& key, const std::shared_ptr<ID
 void AutoSettingGroup::GetEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
 	AutoSettingEntry* pHold = NULL;
-	Util::StringToUpper(key);
+	std::string keyUp = Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == key)
+		if (iter->GetKey() == keyUp)
 		{
 			pHold = &(*iter);
 			break;
@@ -88,19 +89,19 @@ void AutoSettingGroup::GetEntry(const std::string& key, const std::shared_ptr<ID
 	}
 	else
 	{
-		AutoSettingEntry entry(key, pDator);
+		AutoSettingEntry entry(keyUp, pDator);
 		m_Entries.push_back(entry);
 	}
 };
 
 bool AutoSettingGroup::FindEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	Util::StringToUpper(key);
+	std::string keyUp = Util::StringToUpper(key);
 	bool ret = false;
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == key)
+		if (iter->GetKey() == keyUp)
 		{
 			pDator->SetValue(iter->GetValue());
 			ret = true;
@@ -111,20 +112,16 @@ bool AutoSettingGroup::FindEntry(const std::string& key, const std::shared_ptr<I
 };
 void AutoSettingGroup::DeleteEntry(const std::string& key)
 {
-	Util::StringToUpper(key);
+	std::string keyUp = Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == key)
+		if (iter->GetKey() == keyUp)
 		{
 			m_Entries.erase(iter);
 			break;
 		}
 	}
-};
-void AutoSettingGroup::SetSave(bool Save)
-{
-	m_Save = Save;
 };
 
 std::string AutoSettingGroup::GetName()
