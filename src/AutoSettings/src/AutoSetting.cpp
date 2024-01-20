@@ -63,46 +63,19 @@ std::string AutoSetting::GetIniContents()
 void AutoSetting::LoadSettingsInternal(const std::string& iniContent)
 {
 	std::vector<std::string> groups;
-	bool findEnd = false;
-	bool proccess = false;
-	int pos = 0;
-	int pos2 = 0;
-
-	//look for each group
-	for (int ii = 0; ii < iniContent.length(); ii++)
+	auto start = std::find(iniContent.begin(), iniContent.end(), '[');
+	if (start == iniContent.end())
 	{
-		char c = iniContent[ii];
-		if (c == '[')
-		{
-			if (findEnd)
-			{
-				pos2 = ii - 1;
-				findEnd = false;
-				proccess = true;
-			}
-			else
-			{
-				pos = ii;
-				findEnd = true;
-			}
-		}
-		if (proccess)
-		{
-			proccess = false;
-			const std::string& groupStr = iniContent.substr(pos, pos2 - pos);
-			groups.push_back(groupStr);
-			pos = ii;
-			findEnd = true;
-		}
+		return;
 	}
-
-	//add the last
-	if (findEnd)
+	
+	do
 	{
-		pos2 = iniContent.length() - 1;
-		const std::string& groupStr = iniContent.substr(pos, pos2 - pos);
-		groups.push_back(groupStr);
-	}
+		auto next = std::find(start + 1, iniContent.end(), '[');
+		groups.push_back(std::string(start, next-1));
+		start = next;
+	} 
+	while (start != iniContent.end());
 	
 	for (auto groupStr : groups)
 	{
