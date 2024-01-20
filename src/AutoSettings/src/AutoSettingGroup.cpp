@@ -16,11 +16,11 @@ AutoSettingGroup& AutoSettingGroup::operator=(const AutoSettingGroup& other)
 	}
 	return (*this);
 };
-void AutoSettingGroup::SetName(std::string Name)
+void AutoSettingGroup::SetName(const std::string& name)
 {
-	Util::StringToUpper(Name);
-	Util::StringTrim(Name);
-	m_GroupName = Name;
+	Util::StringToUpper(name);
+	Util::StringTrim(name);
+	m_GroupName = name;
 };
 
 void AutoSettingGroup::AddEntry(AutoSettingEntry* pEntry)
@@ -45,40 +45,38 @@ void AutoSettingGroup::AddEntry(AutoSettingEntry* pEntry)
 	}
 };
 
-void AutoSettingGroup::SetEntry(std::string Key, IDator* pDator, bool DatorPersists)
+void AutoSettingGroup::SetEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	AutoSettingEntry* pHold = NULL;
-	Util::StringToUpper(Key);
+	AutoSettingEntry* pHold = nullptr;
+	Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == Key)
+		if (iter->GetKey() == key)
 		{
 			pHold = &(*iter);
 			break;
 		}
 	}
-	if (pHold != NULL)
+	if (pHold != nullptr)
 	{
-		pHold->SetValue(pDator, DatorPersists);
+		pHold->SetValue(pDator);
 	}
 	else
 	{
-		AutoSettingEntry entry;
-		entry.SetKey(Key);
-		entry.SetValue(pDator, DatorPersists);
+		AutoSettingEntry entry(key, pDator);
 		m_Entries.push_back(entry);
 	}
 };
 
-void AutoSettingGroup::GetEntry(std::string Key, IDator* pDator, bool DatorPersists)
+void AutoSettingGroup::GetEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
 	AutoSettingEntry* pHold = NULL;
-	Util::StringToUpper(Key);
+	Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == Key)
+		if (iter->GetKey() == key)
 		{
 			pHold = &(*iter);
 			break;
@@ -90,21 +88,19 @@ void AutoSettingGroup::GetEntry(std::string Key, IDator* pDator, bool DatorPersi
 	}
 	else
 	{
-		AutoSettingEntry entry;
-		entry.SetKey(Key);
-		entry.SetValue(pDator, DatorPersists);
+		AutoSettingEntry entry(key, pDator);
 		m_Entries.push_back(entry);
 	}
 };
 
-bool AutoSettingGroup::FindEntry(std::string Key, IDator* pDator)
+bool AutoSettingGroup::FindEntry(const std::string& key, const std::shared_ptr<IDator> pDator)
 {
-	Util::StringToUpper(Key);
+	Util::StringToUpper(key);
 	bool ret = false;
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == Key)
+		if (iter->GetKey() == key)
 		{
 			pDator->SetValue(iter->GetValue());
 			ret = true;
@@ -113,13 +109,13 @@ bool AutoSettingGroup::FindEntry(std::string Key, IDator* pDator)
 	}
 	return ret;
 };
-void AutoSettingGroup::DeleteEntry(std::string Key)
+void AutoSettingGroup::DeleteEntry(const std::string& key)
 {
-	Util::StringToUpper(Key);
+	Util::StringToUpper(key);
 	std::vector<AutoSettingEntry>::iterator iter;
 	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
 	{
-		if (iter->GetKey() == Key)
+		if (iter->GetKey() == key)
 		{
 			m_Entries.erase(iter);
 			break;
@@ -134,16 +130,12 @@ void AutoSettingGroup::SetSave(bool Save)
 std::string AutoSettingGroup::GetName()
 {
 	return m_GroupName;
-};
-bool AutoSettingGroup::GetSave()
+}
+
+void AutoSettingGroup::GetEntries(std::vector<AutoSettingEntry*>& entries)
 {
-	return m_Save;
-};
-void AutoSettingGroup::GetAllEntries(std::vector<AutoSettingEntry*>* pEntries)
-{
-	std::vector<AutoSettingEntry>::iterator iter;
-	for (iter = m_Entries.begin(); iter != m_Entries.end(); iter++)
-	{
-		(*pEntries).push_back(&(*iter));
-	}
-};
+	entries.clear();
+	entries.reserve(m_Entries.size());
+	std::for_each(m_Entries.begin(), m_Entries.end(), [&entries](AutoSettingEntry& entry) { entries.push_back(&entry); });
+}
+

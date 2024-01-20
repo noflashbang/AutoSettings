@@ -18,7 +18,7 @@ public:
 	{
 	};
 
-	AutoSetting(std::string iniContent)
+	AutoSetting(const std::string& iniContent)
 	{
 		LoadSettings(iniContent);
 	};
@@ -27,14 +27,20 @@ public:
 	{
 	};
 
+	template<typename T>
+	std::shared_ptr<IDator> CreateDator(T& data)
+	{
+		return std::make_shared<Dator<T>>(data);
+	}
+
 	//sets a value -> if not found it will be added, if found the ini value will be updated
-	void SetSetting(const std::string& group, const std::string& key, IDator* pDator);
+	void SetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator);
 
 	//retrives a value -> if not found it will be added, if found the dator value will be updated
-	void GetSetting(const std::string& group, const std::string& key, IDator* pDator);
+	void GetSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator);
 
 	//retrives a value -> if not found it will not be added, if found the dator value will be updated (true on found)
-	bool FindSetting(const std::string& group, const std::string& key, IDator* pDator);
+	bool FindSetting(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator);
 
 	void DeleteSetting(const std::string& group, const std::string& key);
 
@@ -45,58 +51,54 @@ public:
 	std::string GetIniContents();
 
 	template<typename T>
-	void SetSetting(const std::string& group, const std::string& key, T& Data)
+	void SetSetting(const std::string& group, const std::string& key, T& data)
 	{
-		Dator<T> typeDator(Data);
-		SetSettingInternal(Group, Key, &typeDator, false);
+		std::shared_ptr<IDator> typeDator = std::make_shared<Dator<T>>(data);
+		SetSettingInternal(group, key, &typeDator);
 	};
 
-	template<typename T>
-	void SetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
-	{
-		Dator<std::vector<T>> typeDator(Data);
-		SetSettingInternal(Group, Key, &typeDator, false);
-	};
+	//template<typename T>
+	//void SetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
+	//{
+	//	std::shared_ptr<IDator> typeDator = std::make_shared<TypeDator<T>>(Data);
+	//	SetSettingInternal(Group, Key, &typeDator);
+	//};
 
 	template<typename T>
-	void GetSetting(const std::string& group, const std::string& key, T& Data)
+	void GetSetting(const std::string& group, const std::string& key, T& data)
 	{
-		Dator<T> typeDator(Data);
-		GetSettingInternal(Group, Key, &typeDator, false);
+		std::shared_ptr<IDator> typeDator = std::make_shared<Dator<T>>(data);
+		GetSettingInternal(group, key, &typeDator);
 	};
 
-	template<typename T>
-	void GetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
-	{
-		Dator<std::vector<T>> typeDator(Data);
-		GetSettingInternal(Group, Key, &typeDator, false);
-	};
+	//template<typename T>
+	//void GetSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
+	//{
+	//	std::shared_ptr<IDator> typeDator = std::make_shared<TypeDator<T>>(Data);
+	//	GetSettingInternal(Group, Key, &typeDator);
+	//};
 
 	template<typename T>
-	bool FindSetting(const std::string& group, const std::string& key, T& Data)
+	bool FindSetting(const std::string& group, const std::string& key, T& data)
 	{
-		Dator<T> typeDator(Data);
-		return FindSettingInternal(Group, Key, &typeDator, false);
+		std::shared_ptr<IDator> typeDator = std::make_shared<Dator<T>>(data);
+		return FindSettingInternal(group, key, &typeDator);
 	};
 
-	template<typename T>
-	bool FindSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
-	{
-		Dator<std::vector<T>> typeDator(Data);
-		return FindSettingInternal(Group, Key, &typeDator, false);
-	};
+	//template<typename T>
+	//bool FindSetting(const std::string& group, const std::string& key, std::vector<T>& Data)
+	//{
+	//	std::shared_ptr<IDator> typeDator = std::make_shared<TypeDator<T>>(Data);
+	//	return FindSettingInternal(Group, Key, &typeDator);
+	//};
 
 protected:
-
-	void SetSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
-	void GetSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
-	bool FindSettingInternal(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
 
 	void LoadSettingsInternal(const std::string& iniContent);
 
 	std::string GetIniContentsInternal();
 	
-	void AddKeyGroup(const std::string& group, const std::string& key, IDator* pDator, bool DatorPersists = false);
+	void AddKeyGroup(const std::string& group, const std::string& key, const std::shared_ptr<IDator> pDator);
 	
 	bool FindGroupInternal(const std::string& group, AutoSettingGroup** ppGroup);
 	void DeleteKeyGroup(const std::string& group, const std::string& key);

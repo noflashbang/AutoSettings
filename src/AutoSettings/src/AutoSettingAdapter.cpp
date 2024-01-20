@@ -10,8 +10,8 @@ AutoSettingHandle AutoSettingAdapter::AutoSet_Create(const std::string& iniConte
 	//use nanoseconds from clock as handle
 	std::chrono::nanoseconds ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch());
 	bundle.hAutoSetting = ns.count();
-	bundle.pAutoSetting = std::make_unique<AutoSetting>(new AutoSetting(iniContents));
-	return pAdapter->AddAutoSettingBundle(std::move(bundle));	
+	bundle.pAutoSetting = std::make_unique<AutoSetting>(iniContents);
+	return pAdapter->AddAutoSettingBundle(bundle);	
 }
 
 AutoSettingHandle AutoSettingAdapter::AutoSet_Create()
@@ -21,8 +21,8 @@ AutoSettingHandle AutoSettingAdapter::AutoSet_Create()
 	//use nanoseconds from clock as handle
 	std::chrono::nanoseconds ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch());
 	bundle.hAutoSetting = ns.count();
-	bundle.pAutoSetting = std::make_unique<AutoSetting>(new AutoSetting());
-	return pAdapter->AddAutoSettingBundle(std::move(bundle));
+	bundle.pAutoSetting = std::make_unique<AutoSetting>();
+	return pAdapter->AddAutoSettingBundle(bundle);
 }
 
 std::string AutoSettingAdapter::AutoSet_GetIniContents(AutoSettingHandle handle, AutoSettingMode mode)
@@ -32,7 +32,7 @@ std::string AutoSettingAdapter::AutoSet_GetIniContents(AutoSettingHandle handle,
 	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
 	if (bundle != nullptr)
 	{
-		ret = bundle->pAutoSetting->GetIniContents(mode);
+		ret = bundle->pAutoSetting->GetIniContents();
 	}
 	return ret;
 }
@@ -62,171 +62,24 @@ void AutoSettingAdapter::AutoSet_DeleteGroup(AutoSettingHandle handle, const std
 	}
 }
 
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value, bool attachDator)
+void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, const std::shared_ptr<IDator>& value)
 {
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
 	if (bundle != nullptr)
 	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
+		bundle->pAutoSetting->SetSetting(group, key, value);
 	}
 }
 
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, bool& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::string& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<int>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<double>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<bool>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<std::string>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-	if (bundle != nullptr)
-	{
-		pAdapter->SetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value, bool attachDator)
+void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, const std::shared_ptr<IDator>& value)
 {
 	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
 	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
 
 	if (bundle != nullptr)
 	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, bool& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::string& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<int>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<double>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<bool>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
-	}
-}
-
-void AutoSettingAdapter::AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<std::string>& value, bool attachDator)
-{
-	AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
-	const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
-
-	if (bundle != nullptr)
-	{
-		pAdapter->GetSetting(bundle, group, key, value, attachDator);
+		bundle->pAutoSetting->GetSetting(group, key, value);
 	}
 }
 
@@ -249,11 +102,11 @@ AutoSettingAdapter::~AutoSettingAdapter()
 
 }
 
-AutoSettingHandle AutoSettingAdapter::AddAutoSettingBundle(AutoSettingBundle bundle)
+AutoSettingHandle AutoSettingAdapter::AddAutoSettingBundle(AutoSettingBundle& bundle)
 {
 	std::lock_guard<std::mutex> lock(m_mtx);
 	{
-		m_AutoSettings.emplace_back(bundle);
+		m_AutoSettings.push_back(std::move(bundle));
 		return (AutoSettingHandle)bundle.hAutoSetting;
 	}
 }

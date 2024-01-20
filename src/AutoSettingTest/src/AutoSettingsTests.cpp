@@ -26,7 +26,7 @@ SCENARIO("Verify all setting types can be set and retieved", "[AUTOSET]")
 			key3=TRUE,FALSE,TRUE,FALSE,TRUE
 			key4=one,two,three,four,five
 			)";
-		hSettings = AutoSet_Create(ini);
+		hSettings = AutoSetting_Create(ini);
 
 		int ival1 = 0;
 		int ival2 = 0;
@@ -43,18 +43,31 @@ SCENARIO("Verify all setting types can be set and retieved", "[AUTOSET]")
 
 		WHEN("the settings are retrieved")
 		{
-			AutoSet_GetSetting(hSettings, "integers", "key1", ival1);
-			AutoSet_GetSetting(hSettings, "integers", "key2", ival2);
-			AutoSet_GetSetting(hSettings, "doubles", "key1", dval1);
-			AutoSet_GetSetting(hSettings, "doubles", "key2", dval2);
-			AutoSet_GetSetting(hSettings, "bools", "key1", bval1);
-			AutoSet_GetSetting(hSettings, "bools", "key2", bval2);
-			AutoSet_GetSetting(hSettings, "strings", "key1", sval1);
-			AutoSet_GetSetting(hSettings, "strings", "key2", sval2);
-			AutoSet_GetSetting(hSettings, "vectors", "key1", vival1);
-			AutoSet_GetSetting(hSettings, "vectors", "key2", vdval1);
-			AutoSet_GetSetting(hSettings, "vectors", "key3", vbval1);
-			AutoSet_GetSetting(hSettings, "vectors", "key4", vsval1);
+			auto pDator1 = AutoSetting_CreateDator(hSettings, ival1);
+			auto pDator2 = AutoSetting_CreateDator(hSettings, ival2);
+			auto pDator3 = AutoSetting_CreateDator(hSettings, dval1);
+			auto pDator4 = AutoSetting_CreateDator(hSettings, dval2);
+			auto pDator5 = AutoSetting_CreateDator(hSettings, bval1);
+			auto pDator6 = AutoSetting_CreateDator(hSettings, bval2);
+			auto pDator7 = AutoSetting_CreateDator(hSettings, sval1);
+			auto pDator8 = AutoSetting_CreateDator(hSettings, sval2);
+			auto pDator9 = AutoSetting_CreateDator(hSettings, vival1);
+			auto pDator10 = AutoSetting_CreateDator(hSettings, vdval1);
+			auto pDator11 = AutoSetting_CreateDator(hSettings, vbval1);
+			auto pDator12 = AutoSetting_CreateDator(hSettings, vsval1);
+
+			AutoSetting_GetSetting(hSettings, "integers", "key1", pDator1);
+			AutoSetting_GetSetting(hSettings, "integers", "key2", pDator2);
+			AutoSetting_GetSetting(hSettings, "doubles", "key1", pDator3);
+			AutoSetting_GetSetting(hSettings, "doubles", "key2", pDator4);
+			AutoSetting_GetSetting(hSettings, "bools", "key1", pDator5);
+			AutoSetting_GetSetting(hSettings, "bools", "key2", pDator6);
+			AutoSetting_GetSetting(hSettings, "strings", "key1", pDator7);
+			AutoSetting_GetSetting(hSettings, "strings", "key2", pDator8);
+			AutoSetting_GetSetting(hSettings, "vectors", "key1", pDator9);
+			AutoSetting_GetSetting(hSettings, "vectors", "key2", pDator10);
+			AutoSetting_GetSetting(hSettings, "vectors", "key3", pDator11);
+			AutoSetting_GetSetting(hSettings, "vectors", "key4", pDator12);
 
 			THEN("the values are correct")
 			{
@@ -107,31 +120,44 @@ SCENARIO("Verify all setting types can be set and retieved", "[AUTOSET]")
 			vbval1 = { true,false,true,false,true };
 			vsval1 = { "ten","twenty","thirty","forty","fifty" };
 
-			AutoSet_SetSetting(hSettings, "integers", "key1", ival1);
-			AutoSet_SetSetting(hSettings, "integers", "key2", ival2);
-			AutoSet_SetSetting(hSettings, "doubles", "key1", dval1);
-			AutoSet_SetSetting(hSettings, "doubles", "key2", dval2);
-			AutoSet_SetSetting(hSettings, "bools", "key1", bval1);
-			AutoSet_SetSetting(hSettings, "bools", "key2", bval2);
-			AutoSet_SetSetting(hSettings, "strings", "key1", sval1);
-			AutoSet_SetSetting(hSettings, "strings", "key2", sval2);
-			AutoSet_SetSetting(hSettings, "vectors", "key1", vival1);
-			AutoSet_SetSetting(hSettings, "vectors", "key2", vdval1);
-			AutoSet_SetSetting(hSettings, "vectors", "key3", vbval1);
-			AutoSet_SetSetting(hSettings, "vectors", "key4", vsval1);
+			auto pDator1 = AutoSetting_CreateDator(hSettings, ival1);
+			auto pDator2 = AutoSetting_CreateDator(hSettings, ival2);
+			auto pDator3 = AutoSetting_CreateDator(hSettings, dval1);
+			auto pDator4 = AutoSetting_CreateDator(hSettings, dval2);
+			auto pDator5 = AutoSetting_CreateDator(hSettings, bval1);
+			auto pDator6 = AutoSetting_CreateDator(hSettings, bval2);
+			auto pDator7 = AutoSetting_CreateDator(hSettings, sval1);
+			auto pDator8 = AutoSetting_CreateDator(hSettings, sval2);
+			auto pDator9 = AutoSetting_CreateDator(hSettings, vival1);
+			auto pDator10 = AutoSetting_CreateDator(hSettings, vdval1);
+			auto pDator11 = AutoSetting_CreateDator(hSettings, vbval1);
+			auto pDator12 = AutoSetting_CreateDator(hSettings, vsval1);
 
-			AutoSet_GetSetting(hSettings, "integers", "key1", ival1);
-			AutoSet_GetSetting(hSettings, "integers", "key2", ival2);
-			AutoSet_GetSetting(hSettings, "doubles", "key1", dval1);
-			AutoSet_GetSetting(hSettings, "doubles", "key2", dval2);
-			AutoSet_GetSetting(hSettings, "bools", "key1", bval1);
-			AutoSet_GetSetting(hSettings, "bools", "key2", bval2);
-			AutoSet_GetSetting(hSettings, "strings", "key1", sval1);
-			AutoSet_GetSetting(hSettings, "strings", "key2", sval2);
-			AutoSet_GetSetting(hSettings, "vectors", "key1", vival1);
-			AutoSet_GetSetting(hSettings, "vectors", "key2", vdval1);
-			AutoSet_GetSetting(hSettings, "vectors", "key3", vbval1);
-			AutoSet_GetSetting(hSettings, "vectors", "key4", vsval1);
+			AutoSetting_GetSetting(hSettings, "integers", "key1", pDator1);
+			AutoSetting_GetSetting(hSettings, "integers", "key2", pDator2);
+			AutoSetting_GetSetting(hSettings, "doubles", "key1", pDator3);
+			AutoSetting_GetSetting(hSettings, "doubles", "key2", pDator4);
+			AutoSetting_GetSetting(hSettings, "bools", "key1", pDator5);
+			AutoSetting_GetSetting(hSettings, "bools", "key2", pDator6);
+			AutoSetting_GetSetting(hSettings, "strings", "key1", pDator7);
+			AutoSetting_GetSetting(hSettings, "strings", "key2", pDator8);
+			AutoSetting_GetSetting(hSettings, "vectors", "key1", pDator9);
+			AutoSetting_GetSetting(hSettings, "vectors", "key2", pDator10);
+			AutoSetting_GetSetting(hSettings, "vectors", "key3", pDator11);
+			AutoSetting_GetSetting(hSettings, "vectors", "key4", pDator12);
+
+			AutoSetting_GetSetting(hSettings, "integers", "key1", pDator1);
+			AutoSetting_GetSetting(hSettings, "integers", "key2", pDator2);
+			AutoSetting_GetSetting(hSettings, "doubles", "key1", pDator3);
+			AutoSetting_GetSetting(hSettings, "doubles", "key2", pDator4);
+			AutoSetting_GetSetting(hSettings, "bools", "key1", pDator5);
+			AutoSetting_GetSetting(hSettings, "bools", "key2", pDator6);
+			AutoSetting_GetSetting(hSettings, "strings", "key1", pDator7);
+			AutoSetting_GetSetting(hSettings, "strings", "key2", pDator8);
+			AutoSetting_GetSetting(hSettings, "vectors", "key1", pDator9);
+			AutoSetting_GetSetting(hSettings, "vectors", "key2", pDator10);
+			AutoSetting_GetSetting(hSettings, "vectors", "key3", pDator11);
+			AutoSetting_GetSetting(hSettings, "vectors", "key4", pDator12);
 
 			THEN("the values are correct")
 			{

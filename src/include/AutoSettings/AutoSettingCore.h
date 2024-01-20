@@ -22,6 +22,7 @@
 
 #pragma once 
 #include <cstdint>
+#include "IDator.h"
 
 typedef std::uintptr_t AutoSettingHandle;
 typedef int AutoSettingMode;

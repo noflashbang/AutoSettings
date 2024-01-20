@@ -10,7 +10,6 @@ bool AutoSettingSerializerIn::IO(AutoSettingEntry& io)
 
 	io.SetKey(entry[0]);
 	io.SetValue(entry[1]);
-	io.SetLoaded(true);
 	return true;
 }
 bool AutoSettingSerializerIn::IO(AutoSettingGroup& io)

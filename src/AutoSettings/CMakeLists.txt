@@ -6,6 +6,7 @@ cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH PARENT_DIR)
 set( externHeaders 
     ${PARENT_DIR}/include/AutoSettings/AutoSettingApi.h
     ${PARENT_DIR}/include/AutoSettings/AutoSettingCore.h
+    ${PARENT_DIR}/include/AutoSettings/IDator.h
 )
 
 set( libHeaders 
@@ -16,7 +17,6 @@ set( libHeaders
     ${CMAKE_CURRENT_SOURCE_DIR}/src/AutoSettingSerializerIn.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/AutoSettingSerializerOut.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/Dator.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/IDator.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/ISerial.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SerialBase.h
     ${CMAKE_CURRENT_SOURCE_DIR}/src/SerialIn.h

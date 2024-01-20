@@ -16,17 +16,13 @@ bool AutoSettingSerializerOut::IO(AutoSettingGroup& io)
 	m_Data->append(io.GetName());
 	m_Data->append("]\n");
 
-	std::vector<AutoSettingEntry*> Entries;
-	io.GetAllEntries(&Entries);
+	std::vector<AutoSettingEntry*> entries;
+	io.GetEntries(entries);
 
-	for (AutoSettingEntry* pEntry : Entries)
+	std::for_each(entries.begin(), entries.end(), [&](AutoSettingEntry* pEntry)
 	{
-		if (pEntry->GetSave())
-		{
-			AutoSettingEntry hold = (*pEntry);
-			this->IO(hold);
-		}
-	}
-
+		AutoSettingEntry hold = (*pEntry);
+		this->IO(hold);
+	});
 	return true;
 }

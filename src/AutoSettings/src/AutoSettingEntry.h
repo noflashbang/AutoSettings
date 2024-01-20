@@ -7,45 +7,25 @@
 class AutoSettingEntry //Holds the Key and Value information for an ini entry
 {
 public:
-	AutoSettingEntry()
-	{
-		m_Key = "";
-		m_Value = "";
-		m_Datored = false;
-		m_Loaded = false;
-		m_Added = false;
-		m_Save = false;
-		m_pDator = 0;
-	};
-	~AutoSettingEntry() {};
+	AutoSettingEntry() = default;
+	AutoSettingEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
+	~AutoSettingEntry();
 
 	AutoSettingEntry(const AutoSettingEntry& other);
 	AutoSettingEntry& operator=(const AutoSettingEntry& other);
 
-	void SetKey(std::string key);
-	void SetValue(IDator* pDator, bool DatorPersists = false);
-	void SetValue(std::string Value);
-	void ClearDatored();
-	void SetLoaded(bool Loaded);
-	void SetAdded(bool Added);
-	void SetSave(bool Save);
+	void SetKey(const std::string& key);
+	void SetValue(const std::shared_ptr<IDator> pDator);
+	void SetValue(const std::string& value);
 
 	std::string GetKey();
 	std::string GetValue();
-	bool GetDatored();
-	bool GetLoaded();
-	bool GetAdded();
-	bool GetSave();
 
 	void Update();
 
 private:
 	std::string m_Key;
 	std::string m_Value;
-	bool m_Datored; //indicates that this entry has been assigned to a dator(or in otherwords is in use)
-	bool m_Loaded; //indicates that this entry has been loaded from an existing INI 
-	bool m_Added; //indicates that this entry as been added
-	bool m_Save; //used to indicate that this entry should be saved
-	IDator* m_pDator; //used in update on save
+	std::weak_ptr<IDator> m_pDator; //used in update on save
 };
 

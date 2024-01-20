@@ -19,37 +19,26 @@ public:
 	AutoSettingGroup(const AutoSettingGroup& other);
 	AutoSettingGroup& operator=(const AutoSettingGroup& other);
 
-	void SetName(std::string Name);
+	void SetName(const std::string& name);
 
 	void AddEntry(AutoSettingEntry* pEntry);
 
-	void SetEntry(std::string Key, IDator* pDator, bool DatorPersists = false);
-	template<typename T>
-	void SetEntry(std::string Key, T& Data)
-	{
-		Dator<T> typeDator(Data);
-		SetEntry(Key, &typeDator, false);
-	};
+	void SetEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
 
-	void GetEntry(std::string Key, IDator* pDator, bool DatorPersists = false);
-	template<typename T>
-	void GetEntry(std::string Key, T& Data)
-	{
-		Dator<T> typeDator(Data);
-		GetEntry(Key, &typeDator, false);
-	};
+	void GetEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
 
-	bool FindEntry(std::string Key, IDator* pDator);
-	void DeleteEntry(std::string Key);
+	bool FindEntry(const std::string& key, const std::shared_ptr<IDator> pDator);
+	void DeleteEntry(const std::string& key);
 
 	void SetSave(bool Save);
 
 	std::string GetName();
-	bool GetSave();
+	std::string GetEntries();
 
-	void GetAllEntries(std::vector<AutoSettingEntry* >* pEntries);
+	void GetEntries(std::vector<AutoSettingEntry*>& entries);
+
 private:
 	std::string m_GroupName;
-	std::vector< AutoSettingEntry > m_Entries;
+	std::vector<AutoSettingEntry> m_Entries;
 	bool m_Save;
 };

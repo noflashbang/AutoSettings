@@ -10,7 +10,29 @@ struct AutoSettingBundle
 {
 	AutoSettingHandle hAutoSetting;
 	std::unique_ptr<AutoSetting> pAutoSetting;
-	std::vector<std::unique_ptr<IDator>> Dators;
+
+	//default constructor
+	AutoSettingBundle() : hAutoSetting(0), pAutoSetting(nullptr)
+	{
+	}
+
+	//move constructor
+	AutoSettingBundle(AutoSettingBundle&& other) noexcept
+	{
+		hAutoSetting = other.hAutoSetting;
+		pAutoSetting = std::move(other.pAutoSetting);
+	}
+
+	//move assignment
+	AutoSettingBundle& operator=(AutoSettingBundle&& other) noexcept
+	{
+		if (this != &other)
+		{
+			hAutoSetting = other.hAutoSetting;
+			pAutoSetting = std::move(other.pAutoSetting);
+		}
+		return (*this);
+	}
 };
 
 class AutoSettingAdapter
@@ -23,56 +45,22 @@ public:
 	static void AutoSet_Destroy(AutoSettingHandle handle);
 	static void AutoSet_DeleteSetting(AutoSettingHandle handle, const std::string& group, const std::string& key);
 	static void AutoSet_DeleteGroup(AutoSettingHandle handle, const std::string& group);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value,                      bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value,                   bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, bool& value,                     bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::string& value,              bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<int>& value,         bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<double>& value,      bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<bool>& value,        bool attachDator = false);
-	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<std::string>& value, bool attachDator = false);
 
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, int& value,                      bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, double& value,                   bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, bool& value,                     bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::string& value,              bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<int>& value,         bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<double>& value,      bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<bool>& value,        bool attachDator = false);
-	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, std::vector<std::string>& value, bool attachDator = false);
+	static void AutoSet_SetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, const std::shared_ptr<IDator>& value);
+	static void AutoSet_GetSetting(AutoSettingHandle handle, const std::string& group, const std::string& key, const std::shared_ptr<IDator>& value);
 
+	template<typename T>
+	static std::shared_ptr<IDator> AutoSet_CreateDator(const AutoSettingHandle handle, T& data)
+	{
+		AutoSettingAdapter* pAdapter = AutoSettingAdapter::GetInstance();
+		const AutoSettingBundle* bundle = pAdapter->GetAutoSettingBundle(handle);
+		if (bundle != nullptr)
+		{
+			return bundle->pAutoSetting->CreateDator(data);
+		}
+		return nullptr;
+	};
 protected:
-
-	template<typename T>
-	void SetSetting(const AutoSettingBundle* bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
-	{
-		if (attachDator)
-		{
-			// Create a dator for this setting
-			bundle->Dators.push_back(std::make_unique<IDator>(new Dator<T>(Data)));
-			bundle->pAutoSetting->SetSetting(Group, Key, Dator);
-		}
-		else
-		{
-			bundle->pAutoSetting->SetSettingDirect(Group, Key, Data);
-		}
-	};
-
-	template<typename T>
-	void GetSetting(const AutoSettingBundle* bundle, const std::string& Group, const std::string& Key, T& Data, bool attachDator)
-	{
-		if (attachDator)
-		{
-			// Create a dator for this setting
-			bundle->Dators.push_back(std::make_unique<IDator>(new Dator<T>(Data)));
-			bundle->pAutoSetting->GetSetting(Group, Key, pDator);
-		}
-		else
-		{
-			bundle->pAutoSetting->GetSettingDirect(Group, Key, Data);
-		}
-	};
-
 	static AutoSettingAdapter* GetInstance();
 	AutoSettingAdapter();
 	~AutoSettingAdapter();
@@ -80,7 +68,7 @@ protected:
 private:
 	static AutoSettingAdapter* m_Instance;
 
-	AutoSettingHandle AddAutoSettingBundle(AutoSettingBundle bundle);
+	AutoSettingHandle AddAutoSettingBundle(AutoSettingBundle& bundle);
 	AutoSettingBundle* GetAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	void RemoveAutoSettingBundle(AutoSettingHandle hAutoSetting);
 	std::vector<AutoSettingBundle> m_AutoSettings;

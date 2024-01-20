@@ -17,6 +17,7 @@ cmake_path(GET CMAKE_CURRENT_SOURCE_DIR PARENT_PATH PARENT_DIR)
 set( externHeaders 
     ${PARENT_DIR}/include/AutoSettings/AutoSettingApi.h
     ${PARENT_DIR}/include/AutoSettings/AutoSettingCore.h
+    ${PARENT_DIR}/include/AutoSettings/IDator.h
 )
 
 set( testSource 
